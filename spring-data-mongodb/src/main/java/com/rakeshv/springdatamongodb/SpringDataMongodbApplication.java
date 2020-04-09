@@ -14,8 +14,4 @@ public class SpringDataMongodbApplication {
         SpringApplication.run(SpringDataMongodbApplication.class, args);
     }
 
-    @PostConstruct
-    public void display() {
-        log.error("========hello world=======");
-    }
 }
