@@ -29,9 +29,19 @@ without index each document is scanned. slow search. fast insert and update
 with index, does not perform collection scan, fast search and slow inserts/updates
 
 Three components of query
-criteria for filtering data
-sorting definition of data
+criteria for filtering data. Mandatory
+sorting definition for ordering data
 paging definition
+
+
+Query execution
+
+without index
+Each document is scanned and evaluated. slow search. fast insert/update
+
+
+with index
+Each document is not scanned. fast search. slow insert/update
 
 
 

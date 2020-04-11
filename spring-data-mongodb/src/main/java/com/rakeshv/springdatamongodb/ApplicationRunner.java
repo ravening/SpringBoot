@@ -1,6 +1,5 @@
 package com.rakeshv.springdatamongodb;
 
-import com.rakeshv.springdatamongodb.domains.Aircraft;
 import com.rakeshv.springdatamongodb.domains.FlightInformation;
 import com.rakeshv.springdatamongodb.domains.FlightType;
 import com.rakeshv.springdatamongodb.domains.Passenger;
@@ -47,7 +46,12 @@ public class ApplicationRunner implements CommandLineRunner {
 
         this.mongoTemplate.save(passenger);
 
-        Thread.sleep(5000);
+        passenger = Passenger.builder()
+                .firstName("R")
+                .lastName("V")
+                .age(16)
+                .nationality("Indian").build();
+        this.mongoTemplate.save(passenger);
 
         log.info("Passengers are");
         Flux<Passenger> passengerFlux = passengerService.getAllPassengers();
