@@ -45,4 +45,11 @@ Each document is not scanned. fast search. slow insert/update
 
 
 
+@TextIndexed works only on string or array of strings
+Each document is scanned
+a score is computed internally based of the textindex weight
+results are sorted based on score
+
+Weights are added using
+@TextIndexed(weight=2) which means this field 2 times more important than other fields
 

@@ -12,13 +12,13 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class QueryService {
+public class PassengerQueryService {
     @Autowired
     MongoTemplate mongoTemplate;
 
     public List<Passenger> getAdultPassengers() {
         Query query = Query
-                .query(Criteria.where("age").gt(18));
+                .query(Criteria.where("age").gt(18).lt(58));
 
         return mongoTemplate.find(query, Passenger.class);
     }
@@ -26,6 +26,13 @@ public class QueryService {
     public List<Passenger> getMinorPassengers() {
         Query query = Query
                 .query(Criteria.where("age").lt(18));
+
+        return mongoTemplate.find(query, Passenger.class);
+    }
+
+    public List<Passenger> getSeniorPassengers() {
+        Query query = Query
+                .query(Criteria.where("age").gt(58));
 
         return mongoTemplate.find(query, Passenger.class);
     }
