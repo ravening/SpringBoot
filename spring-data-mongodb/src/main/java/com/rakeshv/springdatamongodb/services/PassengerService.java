@@ -6,8 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
-import java.util.List;
-
 @Service
 @Slf4j
 public class PassengerService {
@@ -19,5 +17,21 @@ public class PassengerService {
 
     public Flux<Passenger> getAllPassengers() {
         return passengerRepository.findAll();
+    }
+
+    public Flux<Passenger> getAll() {
+        return this.passengerRepository.findAll();
+    }
+
+    public Flux<Passenger> getAdultPassengers() {
+        return this.passengerRepository.findByAgeBetween(18, 58);
+    }
+
+    public Flux<Passenger> getMinorPassengers() {
+        return this.passengerRepository.findMinors(18);
+    }
+
+    public Flux<Passenger> getSeniorPassengers() {
+        return this.passengerRepository.findSeniors(58);
     }
 }

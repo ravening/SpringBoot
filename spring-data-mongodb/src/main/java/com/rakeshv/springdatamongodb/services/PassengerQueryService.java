@@ -36,4 +36,9 @@ public class PassengerQueryService {
 
         return mongoTemplate.find(query, Passenger.class);
     }
+
+    public List<Passenger> getAll() {
+        log.info("in function getall");
+        return this.mongoTemplate.findAll(Passenger.class);
+    }
 }

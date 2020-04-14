@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Document("flights")
 @Data
@@ -30,7 +31,7 @@ public class FlightInformation {
     private FlightType type;
     private boolean isDelayed;
     private int durationMin;
-    private LocalDate departureDate;
+    private LocalDateTime departureDate;
     private Aircraft aircraft;
 
     @Transient

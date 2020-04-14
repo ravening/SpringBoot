@@ -53,3 +53,9 @@ results are sorted based on score
 Weights are added using
 @TextIndexed(weight=2) which means this field 2 times more important than other fields
 
+Converters are used to map between java objects and mongo db type
+
+First create a write converter to map java object to mongo
+Then write reader converter to read from mongo to java
+register them as spring beans
+
