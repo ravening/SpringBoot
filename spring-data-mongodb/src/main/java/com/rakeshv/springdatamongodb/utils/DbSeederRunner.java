@@ -1,9 +1,11 @@
 package com.rakeshv.springdatamongodb.utils;
 
 import com.rakeshv.springdatamongodb.domains.Aircraft;
+import com.rakeshv.springdatamongodb.domains.Airport;
 import com.rakeshv.springdatamongodb.domains.FlightInformation;
 import com.rakeshv.springdatamongodb.domains.FlightType;
 import com.rakeshv.springdatamongodb.domains.Passenger;
+import com.rakeshv.springdatamongodb.repositories.AirportRepository;
 import com.rakeshv.springdatamongodb.services.FlightInformationService;
 import com.rakeshv.springdatamongodb.services.PassengerService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,11 +30,15 @@ public class DbSeederRunner implements CommandLineRunner {
 
     @Autowired
     PassengerService passengerService;
-    FlightInformationService flightInformationService;
+    private final FlightInformationService flightInformationService;
+    private final AirportRepository airportRepository;
 
-    public DbSeederRunner(MongoTemplate mongoTemplate, FlightInformationService service) {
+    public DbSeederRunner(MongoTemplate mongoTemplate,
+                          FlightInformationService service,
+                          AirportRepository airportRepository) {
         this.mongoTemplate = mongoTemplate;
         this.flightInformationService = service;
+        this.airportRepository = airportRepository;
     }
 
     @Override
@@ -48,9 +54,30 @@ public class DbSeederRunner implements CommandLineRunner {
     }
 
     private void seed() {
+        //Airports
+        Airport bangalore = Airport.builder()
+                .city("Bengaluru")
+                .country("India")
+                .name("BLR").build();
+
+        Airport amsterdam = Airport.builder()
+                .city("Amsterdam")
+                .country("Netherlands")
+                .name("AMS").build();
+
+        Airport lasVegas = Airport.builder()
+                .name("LAS")
+                .country("USA")
+                .city("Las Vegas").build();
+
+        Airport sfo = Airport.builder()
+                .name("SFO")
+                .city("San Francisco")
+                .country("USA").build();
+
         FlightInformation amsToBlr = FlightInformation.builder()
-                .departureCity("Amsterdam")
-                .destinationCity("Bengaluru")
+                .departure(amsterdam)
+                .destination(bangalore)
                 .type(FlightType.International)
                 .durationMin(600)
                 .aircraft(Aircraft.builder().model("747").nbSeats(250).build())
@@ -58,8 +85,8 @@ public class DbSeederRunner implements CommandLineRunner {
                 .isDelayed(true).build();
 
         FlightInformation blrToAms = FlightInformation.builder()
-                .departureCity("Bengaluru")
-                .destinationCity("Amsterdam")
+                .departure(bangalore)
+                .destination(amsterdam)
                 .type(FlightType.International)
                 .durationMin(540)
                 .aircraft(Aircraft.builder().model("747").nbSeats(250).build())
@@ -67,8 +94,8 @@ public class DbSeederRunner implements CommandLineRunner {
                 .isDelayed(false).build();
 
         FlightInformation blrToDelhi = FlightInformation.builder()
-                .destinationCity("Delhi")
-                .departureCity("Bengaluru")
+                .destination(sfo)
+                .departure(bangalore)
                 .type(FlightType.Internal)
                 .durationMin(180)
                 .aircraft(Aircraft.builder().model("737").nbSeats(100).build())
@@ -76,8 +103,8 @@ public class DbSeederRunner implements CommandLineRunner {
                 .isDelayed(true).build();
 
         FlightInformation lasToSfo = FlightInformation.builder()
-                .destinationCity("Las Vegas")
-                .destinationCity("San Francisco")
+                .departure(lasVegas)
+                .destination(sfo)
                 .type(FlightType.Internal)
                 .durationMin(120)
                 .aircraft(Aircraft.builder().model("A319").nbSeats(150).build())
@@ -85,13 +112,21 @@ public class DbSeederRunner implements CommandLineRunner {
                 .isDelayed(true).build();
 
         FlightInformation sfoToAms = FlightInformation.builder()
-                .destinationCity("Amsterdam")
-                .departureCity("San Francisco")
+                .destination(amsterdam)
+                .departure(sfo)
                 .departureDate(LocalDateTime.of(2020, 5, 15, 10, 35, 0))
                 .durationMin(660)
                 .aircraft(Aircraft.builder().model("747").nbSeats(300).build())
                 .type(FlightType.International)
                 .isDelayed(false).build();
+
+        // Since we are using life cycle event listener GenericCascadeEventListener
+        // this can be commented. Event listener will save all the airports before
+        // saving the flight information
+//        this.airportRepository.saveAll(
+//                Flux.just(bangalore, amsterdam, sfo, lasVegas)
+//        ).subscribe();
+
 
         List<FlightInformation> flightInformations = Arrays.asList(
                 blrToAms,
@@ -143,11 +178,14 @@ public class DbSeederRunner implements CommandLineRunner {
             log.info("{}", passenger);
         });
 
-        log.info("======");
         log.info("Flight informations are");
         Flux<FlightInformation> flightInformationFlux = flightInformationService.getAllFlightInformation();
         flightInformationFlux.subscribe(flightInformation1 -> {
-            log.info("{}", flightInformation1);
+            log.info("{}", flightInformation1.toString());
         });
+
+        log.info("===Airports are");
+        Flux<Airport> airportFlux = airportRepository.findAll();
+        airportFlux.subscribe(airport -> log.info("{}", airport));
     }
 }

@@ -20,7 +20,8 @@ public class FlightInformationService {
     }
 
     public Flux<FlightInformation> getAllFlightInformation() {
-        return flightInformationRepository.findAll(Sort.by("departureCity").ascending());
+        return flightInformationRepository.findAll();
+//        return flightInformationRepository.findAll(Sort.by("departureCity").ascending());
     }
 
     public Flux<FlightInformation> insert(Flux<FlightInformation> flightInformations) {

@@ -6,6 +6,7 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -20,13 +21,14 @@ public class FlightInformation {
     @Id
     private String id;
 
-    @Field("departure")
-    @Indexed
-    private String departureCity;
+//    @Indexed(unique = true)
+//    private String internalId;
 
-    @Field("destination")
-    @Indexed
-    private String destinationCity;
+    @DBRef
+    private Airport departure;
+
+    @DBRef
+    private Airport destination;
 
     private FlightType type;
     private boolean isDelayed;
@@ -41,4 +43,18 @@ public class FlightInformation {
         this.createdAt = LocalDate.now();
     }
 
+    @Override
+    public String toString() {
+        return "FlightInformation{" +
+                "id='" + id + '\'' +
+                ", departure=" + departure +
+                ", destination=" + destination +
+                ", type=" + type +
+                ", isDelayed=" + isDelayed +
+                ", durationMin=" + durationMin +
+                ", departureDate=" + departureDate +
+                ", aircraft=" + aircraft +
+                ", createdAt=" + createdAt +
+                '}';
+    }
 }

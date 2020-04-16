@@ -59,3 +59,42 @@ First create a write converter to map java object to mongo
 Then write reader converter to read from mongo to java
 register them as spring beans
 
+
+Two types of references in mongodb
+Manual and DBref
+
+Manual stores the _id of the other document
+DBRefs links documents using _id field, collection name or db name
+DBRefs can link documents across collections and event dbs
+
+DBRef has $ref, $id and $db
+These fields needs to be in particular order
+If they are interchanged, we dont get the data
+
+Cascading does not work by default on save function.
+If a second doc is referenced in first doc, then saving the first doc\
+doesnt save the second doc in second collection
+
+Save second doc first, assign it in first doc and then save the first doc
+
+By default ir performs eager loading. it can be changes using\
+@DBRef(lazy = true)
+
+So second doc is fetched only when its field is accessed
+
+@Query wont work with #DBRef
+
+Lifecycle events
+
+Saving doc
+1. onBeforeConvert 2. onBeforeSave 3. onAfterSave
+
+Loading doc
+1. onAfterLoad 2. onAfterConvert
+
+Deleting doc
+1. onBeforeDelete 2. onAfterDelete
+
+These are applicable only to root level docs and not embedded ones
+
+Extend AbstractMongoEventListener
