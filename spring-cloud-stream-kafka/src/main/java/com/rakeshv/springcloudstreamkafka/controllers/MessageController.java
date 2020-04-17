@@ -52,5 +52,11 @@ public class MessageController {
     public ResponseEntity<List<String>> getMessage() {
         return new ResponseEntity<>(greetingsListener.getMessages(), HttpStatus.OK);
     }
+
+    @GetMapping("/clearmessages")
+    public String clearMessages() {
+        greetingsListener.clearMessage();
+        return "All messages cleared";
+    }
 }
 

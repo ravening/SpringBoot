@@ -38,4 +38,9 @@ public class GreetingsListener {
         log.info("Fetching list of messages received so far");
         return messages;
     }
+
+    public void clearMessage() {
+        log.info("Clearing all received messages");
+        messages.clear();
+    }
 }
