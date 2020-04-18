@@ -5,23 +5,14 @@
   </div> -->
 
   <div class="container">
-    <InstructorApp />
+    <router-view/>
   </div>
 </template>
 
 <script>
-import InstructorApp from './components/InstructorApp.vue'
 
 export default {
-  // name: 'App',
-  // components: {
-  //   HelloWorld
-  // }
-
-  name: 'Rakesh Venkatesh',
-  components: {
-    InstructorApp
-  }
+  name: "app"
 }
 </script>
 
