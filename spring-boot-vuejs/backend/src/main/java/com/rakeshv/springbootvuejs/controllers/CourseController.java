@@ -20,11 +20,13 @@ public class CourseController {
 
     @GetMapping("/courses")
     public List<Course> getAllCourses() {
+        log.info("Fetching all the courses");
         return courseRepository.findAll();
     }
 
     @GetMapping("/courses/{username}")
     public List<Course> findCourseByUsername(@PathVariable("username") String username) {
+        log.info("Fetching courses for username {}", username);
         return courseRepository.findByUsernameContains(username);
     }
 }
