@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-boot-vuejs
+  labels:
+    app: spring-boot-vuejs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-boot-vuejs
+  template:
+    metadata:
+      labels:
+        app: spring-boot-vuejs
+    spec:
+      containers:
+        - name: spring-boot-vuejs
+          imagePullPolicy: Always
+          image: rakgenius/spring-boot-vuejs:0.0.6
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring-boot-vuejs
+  labels:
+    app: spring-boot-vuejs
+spec:
+  clusterIP: None
+#  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+      name: spring-boot-vuejs
+  selector:
+    app: spring-boot-vuejs

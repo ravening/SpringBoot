@@ -1,4 +1,6 @@
 #!/bin/bash
+
+ rm -rf backend/src/main/resources/public/*
 cd frontend
 rm -rf dist
 npm run build

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BACKEND_URL = "http://localhost:8080";
+const BACKEND_URL = "http://spring-boot-vuejs:8080";
 const COURSES_API_URL = `${BACKEND_URL}/api/courses`;
 
 class CourseDataService {

@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vuejs-frontend
+  labels:
+    app: vuejs-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vuejs-frontend
+  template:
+    metadata:
+      labels:
+        app: vuejs-frontend
+    spec:
+      containers:
+        - name: vuejs-frontend
+          imagePullPolicy: Always
+          image: rakgenius/vuejs-frontend:0.0.1
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vuejs-frontend
+  labels:
+    app: vuejs-frontend
+spec:
+  # type: NodePort
+  clusterIP: None
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: vuejs-frontend
+  selector:
+    app: vuejs-frontend

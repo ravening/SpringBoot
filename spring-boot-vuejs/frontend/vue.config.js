@@ -1,4 +1,4 @@
-module.exports = {
-  outputDir: '../backend/src/main/resources/public/',
-  assetsDir: 'static'
-};
+// module.exports = {
+//   outputDir: '../backend/src/main/resources/static/',
+//   assetsDir: 'static'
+// };
