@@ -8,7 +8,7 @@ const router = new Router({
     routes: [
         {
             path: "/",
-            name: "Courses",
+            name: "Mainpage",
             component: () => import("./components/Courses"),
         },
         {
@@ -18,7 +18,7 @@ const router = new Router({
         },
         {
             path: "/course/:id",
-            name: "Courses",
+            name: "Course",
             component: () => import("./components/Course"),
         },
     ]

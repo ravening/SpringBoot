@@ -15,21 +15,12 @@ spec:
   backend:
     serviceName: default-http-backend
     servicePort: 80
+
   rules:
+    - host: spring-boot-vuejs
     - http:
         paths:
           - path: /api/.*
-            #      - path: /greetings(/|$)(.*)
             backend:
               serviceName: spring-boot-vuejs
               servicePort: 8080
-
-          - path: /courses
-            backend:
-              servicePort: 80
-              serviceName: vuejs-frontend
-
-          - path: /**
-            backend:
-              servicePort: 80
-              serviceName: vuejs-frontend

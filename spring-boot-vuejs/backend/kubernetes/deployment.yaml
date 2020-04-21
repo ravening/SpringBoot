@@ -28,8 +28,6 @@ metadata:
   labels:
     app: spring-boot-vuejs
 spec:
-  clusterIP: None
-#  type: NodePort
   ports:
     - port: 8080
       targetPort: 8080
