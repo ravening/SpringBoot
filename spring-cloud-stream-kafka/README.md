@@ -60,5 +60,5 @@ http://<IP address of kubernetes cluster master>/greetings/send/helloworld
 4. Retrieve all the message sent using
 
 ```html
-http://<IP address of kubernetes cluster master>/greetings/readmessages
+http://<IP address of kubernetes cluster master>/greetings/readmessage
 ```
