@@ -15,7 +15,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @Builder
-@RelationshipEntity(type = "INTERFACE")
+@RelationshipEntity(type = "PORT")
 public class ConnectionRelationship {
     @Id
     @GeneratedValue

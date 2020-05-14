@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 
 @RepositoryRestResource
@@ -17,12 +18,15 @@ public interface EquipmentRepository extends Neo4jRepository<Equipment, Long> {
 
     Equipment findByIpaddress(@Param("ip") String ip);
 
-    @Query("MATCH (e:Equipment)-[r:INTERFACE]->(i:Interface) RETURN e,r,i")
+    @Query("MATCH (e:Equipment)-[r:PORT]->(i:Interface) RETURN e,r,i")
     List<Equipment> equipmentGraph(@Param("name") String name);
 
     @Query(value = "MATCH (e:Equipment),(i:Interface)\n" +
             "WHERE e.name = :#{#name} AND i.name = :#{#switchname}\n" +
-            "CREATE (e)-[r:INTERFACE {name: e.name}]->(i)")
+            "CREATE (e)-[r:PORT {name: e.name}]->(i)")
     @Transactional
     void createEquipmentRelationship(@Param("name") String name, @Param("switchname") String switchname);
+
+    @Query("MATCH (e: Equipment)-[r:PORT]->(i:Interface) RETURN e,r,i LIMIT {limit}")
+    Collection<Equipment> graph(@Param("limit") int limit);
 }

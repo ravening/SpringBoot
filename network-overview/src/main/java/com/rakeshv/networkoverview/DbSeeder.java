@@ -31,6 +31,14 @@ public class DbSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        equipmentRepository.deleteAll();
+        interfaceRepository.deleteAll();
+        vlanRepository.deleteAll();
+        // first vlan
+        Vlan vlan = Vlan.builder()
+                .vlanid(300L).build();
+        vlan = vlanFunction.apply(vlan);
+
         Equipment equipment = Equipment.builder()
                 .name("myswitch")
                 .ipaddress("22.22.22.22")
@@ -39,18 +47,15 @@ public class DbSeeder implements CommandLineRunner {
 
         // first equipment
         equipment = equipmentFunction.apply(equipment);
-        log.info("Saved equipment:  {}", equipment);
 
         // first interface
         Interface anInterface = Interface.builder()
-                .name("ETH11").build();
+                .name("ETH11")
+                .vlanList(List.of(vlan.getVlanid())).build();
+//        anInterface.addVlan(vlan.getVlanid());
         anInterface = interfaceFunction.apply(anInterface);
         log.info("Saved interface: {}", anInterface);
 
-        // first vlan
-        Vlan vlan = Vlan.builder()
-                .vlanid(300L).build();
-        vlan = vlanFunction.apply(vlan);
         log.info("Saved vlan: {}", vlan);
 
         equipmentRepository.createEquipmentRelationship(equipment.getName(), anInterface.getName());
@@ -63,11 +68,11 @@ public class DbSeeder implements CommandLineRunner {
                 .model("ARISTA")
                 .type(EquipmentType.ROUTER.getDescription()).build();
         equipment1 = equipmentFunction.apply(equipment1);
-        log.info("Saved equipment: {}", equipment1);
 
         // second interface
         Interface secondInterface = Interface.builder()
-                .name("ETH33").build();
+                .name("ETH33")
+                .vlanList(List.of(vlan.getVlanid())).build();
         secondInterface = interfaceFunction.apply(secondInterface);
         log.info("Saved second interface: {}", secondInterface);
 
@@ -91,11 +96,15 @@ public class DbSeeder implements CommandLineRunner {
         equipment1.addInterface(secondInterface);
         equipment1.addInterface(fourthInterface);
 
-        log.info("interfaces for equipment are : {}", equipment.getInterfaces());
-        log.info("interfaces for equipment1 are : {}", equipment1.getInterfaces());
+        log.info("interfaces for equipment are : {}", equipment.getLinks());
+        log.info("interfaces for equipment1 are : {}", equipment1.getLinks());
         List<Equipment> equipmentList = Arrays.asList(equipment, equipment1);
         equipmentRepository.saveAll(equipmentList);
 
+        Equipment stored = equipmentRepository.findById(equipment.getId()).get();
+        log.info("First equipment is {}", stored);
+        stored = equipmentRepository.findById(equipment1.getId()).get();
+        log.info("Second equipment is {}", stored);
         List<Interface> interfaceList = Arrays.asList(anInterface, secondInterface, thirdInterface, fourthInterface);
         vlan.addInterface(anInterface);
         vlan.addInterface(secondInterface);
@@ -113,11 +122,11 @@ public class DbSeeder implements CommandLineRunner {
 
 
 
-        equipmentRepository.deleteAll();
-        interfaceRepository.deleteAll();
-        vlanRepository.deleteAll();
-
-        buildGraph();
+//        equipmentRepository.deleteAll();
+//        interfaceRepository.deleteAll();
+//        vlanRepository.deleteAll();
+//
+//        buildGraph();
     }
 
     private void buildGraph() {

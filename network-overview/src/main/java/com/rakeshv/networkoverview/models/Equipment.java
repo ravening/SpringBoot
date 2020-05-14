@@ -1,8 +1,11 @@
 package com.rakeshv.networkoverview.models;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
@@ -17,6 +20,7 @@ import java.util.Set;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @NodeEntity
 public class Equipment {
@@ -27,18 +31,22 @@ public class Equipment {
     private String ipaddress;
     private String model;
     private List<String> links;
-//    @EnumString(value = EquipmentType.class, lenient = true)
     private String type;
-//    private EquipmentType type;
 
-    @Relationship(type = "INTERFACE")
+    @Relationship(type = "PORT")
     private List<Interface> interfaces;
 
     public void addInterface(Interface anInterface) {
         if (this.links == null) {
             this.links = new ArrayList<>();
         }
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            String result = mapper.writeValueAsString(anInterface);
+            this.links.add(result);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
 
-        this.links.add(anInterface.toString());
     }
 }
