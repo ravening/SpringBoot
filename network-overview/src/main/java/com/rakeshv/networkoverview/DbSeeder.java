@@ -120,7 +120,25 @@ public class DbSeeder implements CommandLineRunner {
         interfaceRepository.createVlanRelationship(fourthInterface.getName(), vlan.getVlanid());
 
 
+        Interface fifthInterface = Interface.builder()
+                .name("ETH0").build();
+        Interface sixthInterface = Interface.builder()
+                .name("ETH41").build();
 
+
+
+        fifthInterface.addInterface(sixthInterface);
+
+        fifthInterface = interfaceFunction.apply(fifthInterface);
+        sixthInterface = interfaceFunction.apply(sixthInterface);
+
+        equipment.addInterface(fifthInterface);
+        equipment1.addInterface(sixthInterface);
+
+        equipment = equipmentFunction.apply(equipment);
+        equipment1 = equipmentFunction.apply(equipment1);
+        equipmentRepository.createEquipmentRelationship(equipment.getName(), fifthInterface.getName());
+        equipmentRepository.createEquipmentRelationship(equipment1.getName(), sixthInterface.getName());
 
 //        equipmentRepository.deleteAll();
 //        interfaceRepository.deleteAll();

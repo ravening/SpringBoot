@@ -33,6 +33,9 @@ public class Interface {
     @Relationship(type = "VLAN")
     private Vlan vlan;
 
+    @Relationship(type = "DIRECT", direction = Relationship.UNDIRECTED)
+    private Set<Interface> interfaceSet;
+
     @Override
     public String toString() {
         return "{'name': " + this.name + ", 'id': " + this.id + ", 'vlanList:'" + this.getVlanList() + "}";
@@ -43,6 +46,15 @@ public class Interface {
             this.vlanList = new ArrayList<>();
         }
         this.vlanList.add(id);
+    }
+
+    public void addInterface(Interface anotherInterface) {
+        if (this.interfaceSet == null) {
+            this.interfaceSet = new HashSet<>();
+        }
+        if (!this.interfaceSet.contains(anotherInterface)) {
+            this.interfaceSet.add(anotherInterface);
+        }
     }
 //    @Relationship(type = "VLAN", direction = Relationship.INCOMING)
 //    private Interface anotherInterface;
