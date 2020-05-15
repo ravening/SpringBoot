@@ -13,7 +13,7 @@ import java.util.List;
 @RepositoryRestResource
 public interface EquipmentRepository extends Neo4jRepository<Equipment, Long> {
 
-    Equipment findByNameEqualsIgnoreCase(@Param("name") String name);
+    Equipment findByName(@Param("name") String name);
     List<Equipment> findByNameLike(@Param("name") String name);
 
     Equipment findByIpaddress(@Param("ip") String ip);
@@ -21,11 +21,19 @@ public interface EquipmentRepository extends Neo4jRepository<Equipment, Long> {
     @Query("MATCH (e:Equipment)-[r:PORT]->(i:Interface) RETURN e,r,i")
     List<Equipment> equipmentGraph(@Param("name") String name);
 
+//    @Query(value = "MATCH (e:Equipment),(i:Interface)\n" +
+//            "WHERE e.name = :#{#name} AND i.name = :#{#switchname}\n" +
+//            "CREATE (e)-[r:PORT {name: e.name}]->(i)")
+//    @Transactional
+//    void createEquipmentRelationship(@Param("name") String name, @Param("switchname") String switchname);
+
     @Query(value = "MATCH (e:Equipment),(i:Interface)\n" +
-            "WHERE e.name = :#{#name} AND i.name = :#{#switchname}\n" +
+            "WHERE e.name = :#{#name} AND i.name = :#{#switchname} AND i.switchId = :#{#switchid}\n" +
             "CREATE (e)-[r:PORT {name: e.name}]->(i)")
     @Transactional
-    void createEquipmentRelationship(@Param("name") String name, @Param("switchname") String switchname);
+    void createEquipmentRelationship(@Param("name") String name,
+                                     @Param("switchname") String switchname,
+                                     @Param("switchid") Long switchid);
 
     @Query("MATCH (e: Equipment)-[r:PORT]->(i:Interface) RETURN e,r,i LIMIT {limit}")
     Collection<Equipment> graph(@Param("limit") int limit);

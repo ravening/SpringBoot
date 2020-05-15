@@ -25,7 +25,14 @@ public class Interface {
     @GeneratedValue
     private Long id;
     private String name;
+    private String macAddress;
+    private String ipAddress;
+    private Long switchId;
+    private String switchName;
     private List<Long> vlanList = new ArrayList<>();
+    private String neighborPort;
+    private String neighborHost;
+    private List<Interface> neighbours;
 
     @Relationship(type = "PORT", direction = Relationship.INCOMING)
     private ConnectionRelationship connectionRelationship;
@@ -38,7 +45,7 @@ public class Interface {
 
     @Override
     public String toString() {
-        return "{'name': " + this.name + ", 'id': " + this.id + ", 'vlanList:'" + this.getVlanList() + "}";
+        return "{'name': " + this.name + ", 'id': " + this.id + ", belongsto:" + switchId + "'vlanList:'" + this.getVlanList() + "}";
     }
 
     public void addVlan(Long id) {
@@ -55,6 +62,13 @@ public class Interface {
         if (!this.interfaceSet.contains(anotherInterface)) {
             this.interfaceSet.add(anotherInterface);
         }
+    }
+
+    public void addNeighbour(Interface anotherInterface) {
+        if (this.neighbours == null) {
+            this.neighbours = new ArrayList<>();
+        }
+        this.neighbours.add(anotherInterface);
     }
 //    @Relationship(type = "VLAN", direction = Relationship.INCOMING)
 //    private Interface anotherInterface;

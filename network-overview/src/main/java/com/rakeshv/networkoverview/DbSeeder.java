@@ -19,9 +19,9 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
-@Component
+//@Component
 @Slf4j
-public class DbSeeder implements CommandLineRunner {
+public class DbSeeder { //} implements CommandLineRunner {
     @Autowired
     EquipmentRepository equipmentRepository;
     @Autowired
@@ -29,7 +29,7 @@ public class DbSeeder implements CommandLineRunner {
     @Autowired
     VlanRepository vlanRepository;
 
-    @Override
+   // @Override
     public void run(String... args) throws Exception {
         equipmentRepository.deleteAll();
         interfaceRepository.deleteAll();
@@ -58,7 +58,7 @@ public class DbSeeder implements CommandLineRunner {
 
         log.info("Saved vlan: {}", vlan);
 
-        equipmentRepository.createEquipmentRelationship(equipment.getName(), anInterface.getName());
+//        equipmentRepository.createEquipmentRelationship(equipment.getName(), anInterface.getName());
         interfaceRepository.createVlanRelationship(anInterface.getName(), vlan.getVlanid());
 
         // second equipment
@@ -76,7 +76,7 @@ public class DbSeeder implements CommandLineRunner {
         secondInterface = interfaceFunction.apply(secondInterface);
         log.info("Saved second interface: {}", secondInterface);
 
-        equipmentRepository.createEquipmentRelationship(equipment1.getName(), secondInterface.getName());
+//        equipmentRepository.createEquipmentRelationship(equipment1.getName(), secondInterface.getName());
         interfaceRepository.createVlanRelationship(secondInterface.getName(), vlan.getVlanid());
 
         // create second interface for each equipment
@@ -87,8 +87,8 @@ public class DbSeeder implements CommandLineRunner {
                 .name("XE22").build();
         fourthInterface = interfaceFunction.apply(fourthInterface);
 
-        equipmentRepository.createEquipmentRelationship(equipment.getName(), thirdInterface.getName());
-        equipmentRepository.createEquipmentRelationship(equipment1.getName(), fourthInterface.getName());
+//        equipmentRepository.createEquipmentRelationship(equipment.getName(), thirdInterface.getName());
+//        equipmentRepository.createEquipmentRelationship(equipment1.getName(), fourthInterface.getName());
 
         equipment.addInterface(anInterface);
         equipment.addInterface(thirdInterface);
@@ -137,8 +137,8 @@ public class DbSeeder implements CommandLineRunner {
 
         equipment = equipmentFunction.apply(equipment);
         equipment1 = equipmentFunction.apply(equipment1);
-        equipmentRepository.createEquipmentRelationship(equipment.getName(), fifthInterface.getName());
-        equipmentRepository.createEquipmentRelationship(equipment1.getName(), sixthInterface.getName());
+//        equipmentRepository.createEquipmentRelationship(equipment.getName(), fifthInterface.getName());
+//        equipmentRepository.createEquipmentRelationship(equipment1.getName(), sixthInterface.getName());
 
 //        equipmentRepository.deleteAll();
 //        interfaceRepository.deleteAll();
@@ -166,8 +166,8 @@ public class DbSeeder implements CommandLineRunner {
                 .name("et-2").build();
         secondInterface = interfaceFunction.apply(secondInterface);
 
-        equipmentRepository.createEquipmentRelationship(equipment.getName(), anInterface.getName());
-        equipmentRepository.createEquipmentRelationship(equipment1.getName(), secondInterface.getName());
+//        equipmentRepository.createEquipmentRelationship(equipment.getName(), anInterface.getName());
+//        equipmentRepository.createEquipmentRelationship(equipment1.getName(), secondInterface.getName());
         IntStream.range(1, 101)
                 .forEach(i -> {
                     Vlan vlan = Vlan.builder()

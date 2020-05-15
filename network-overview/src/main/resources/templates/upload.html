@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Upload CSV File Example</title>
+
+    <!--Bootstrap 4-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-6 mx-auto">
+            <h1>Upload CSV to create network diagram</h1>
+            <form method="GET" th:action="@{/upload/equipment}" enctype="multipart/form-data">
+                <button type="submit" class="btn btn-primary">Upload equipments</button>
+            </form>
+<br>
+            <form method="GET" th:action="@{/upload/interfaces}" enctype="multipart/form-data">
+                <button type="submit" class="btn btn-primary">Upload Interfaces</button>
+            </form>
+            <br>
+            <form method="GET" th:action="@{/upload/connections}" enctype="multipart/form-data">
+                <button type="submit" class="btn btn-primary">Upload Connections</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

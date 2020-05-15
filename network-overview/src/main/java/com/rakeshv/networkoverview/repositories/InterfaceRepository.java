@@ -20,8 +20,11 @@ public interface InterfaceRepository extends Neo4jRepository<Interface, Long> {
 
     Interface findByName(@Param("name") String name);
 
+    Interface findByNameAndSwitchName(@Param("name") String name, @Param("switchname") String switchname);
+
     List<Interface> findByNameLike(@Param("name") String name);
 
+    Interface findByNameAndSwitchId(@Param("name") String name, @Param("id") Long id);
 //    @Query(value = "MATCH (from:Interface),(to:Interface)\n" +
 //            "WHERE from.name = :#{#fromname} AND to.name = :#{#toname}\n" +
 //            "CREATE (from)-[r:VLAN {name: :#{#vlanid}}]->(to)\n" +

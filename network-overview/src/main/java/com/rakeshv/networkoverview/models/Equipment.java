@@ -32,6 +32,7 @@ public class Equipment {
     private String model;
     private List<String> links;
     private String type;
+    private Long equipmentId;
 
     @Relationship(type = "PORT")
     private List<Interface> interfaces;

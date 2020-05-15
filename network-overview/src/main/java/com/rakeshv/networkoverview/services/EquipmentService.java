@@ -18,7 +18,7 @@ public class EquipmentService {
 
     @Transactional
     public Equipment findEquipmentByName(String name) {
-        return equipmentRepository.findByNameEqualsIgnoreCase(name);
+        return equipmentRepository.findByName(name);
     }
 
     @Transactional
@@ -50,7 +50,7 @@ public class EquipmentService {
     }
 
     public void deleteEquipment(String name) {
-        Optional<Equipment> equipmentOptional = Optional.ofNullable(equipmentRepository.findByNameEqualsIgnoreCase(name));
+        Optional<Equipment> equipmentOptional = Optional.ofNullable(equipmentRepository.findByName(name));
         Equipment equipment = equipmentOptional.orElseThrow(() ->
                 new RuntimeException("Unable to find equipment with name " + name));
 
