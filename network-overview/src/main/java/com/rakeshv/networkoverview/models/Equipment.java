@@ -30,9 +30,9 @@ public class Equipment {
     private String name;
     private String ipaddress;
     private String model;
-    private List<String> links;
     private String type;
     private Long equipmentId;
+    private List<String> links;
 
     @Relationship(type = "PORT")
     private List<Interface> interfaces;

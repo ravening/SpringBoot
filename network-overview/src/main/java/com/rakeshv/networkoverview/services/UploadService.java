@@ -6,13 +6,16 @@ import com.rakeshv.networkoverview.models.EquipmentCsv;
 import com.rakeshv.networkoverview.models.ExecutionStatus;
 import com.rakeshv.networkoverview.models.Interface;
 import com.rakeshv.networkoverview.models.InterfaceCsv;
+import com.rakeshv.networkoverview.models.Vlan;
 import com.rakeshv.networkoverview.repositories.EquipmentRepository;
 import com.rakeshv.networkoverview.repositories.InterfaceRepository;
+import com.rakeshv.networkoverview.repositories.VlanRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -22,6 +25,8 @@ public class UploadService {
     EquipmentRepository equipmentRepository;
     @Autowired
     InterfaceRepository interfaceRepository;
+    @Autowired
+    VlanRepository vlanRepository;
 
     public void saveEquipments(List<EquipmentCsv> equipmentList) {
         for (EquipmentCsv equipmentCsv : equipmentList) {
@@ -40,6 +45,18 @@ public class UploadService {
     }
 
     public ExecutionStatus saveInterface(List<InterfaceCsv> interfaceList) {
+        Vlan vlan = Vlan.builder()
+                .vlanid(100L).build();
+        Vlan vlan1 = Vlan.builder()
+                .vlanid(200L).build();
+        Vlan vlan2 = Vlan.builder()
+                .vlanid(300L).build();
+        Vlan vlan3 = Vlan.builder()
+                .vlanid(400L).build();
+        Vlan vlan4 = Vlan.builder()
+                .vlanid(500L).build();
+
+
         boolean success = true;
         String message = "";
         for (InterfaceCsv interfaceCsv : interfaceList) {
@@ -60,15 +77,23 @@ public class UploadService {
                     .ipAddress(interfaceCsv.getIpAddress())
                     .macAddress(interfaceCsv.getMacAddress())
                     .switchId(equipment.getId())
+                    .switchName(interfaceCsv.getSwitchName())
+                    .vlanList(Arrays.asList(vlan.getVlanid(), vlan1.getVlanid(), vlan2.getVlanid(), vlan3.getVlanid(), vlan4.getVlanid()))
                     .build();
+
+            vlan.addInterface(anInterface);
+            vlan1.addInterface(anInterface);
+
 
             interfaceRepository.save(anInterface);
 
             equipment.addInterface(anInterface);
             equipmentRepository.save(equipment);
+
+
         }
 
-
+        vlanRepository.saveAll(Arrays.asList(vlan, vlan1, vlan2, vlan3, vlan4));
         return ExecutionStatus.builder()
                 .message(message)
                 .status(success)

@@ -87,7 +87,6 @@
                     $("#title").text(equipment.name);
                     var $list = $("#interface").empty();
                     equipment.links.forEach(function (link) {
-                        console.log(link);
                         $list.append($("<li>" + "Name: " + JSON.parse(link).name + " " +
                                                 "IP address: " + JSON.parse(link).ipAddress + " " +
                                                 "MAC address: " + JSON.parse(link).macAddress + " " +
