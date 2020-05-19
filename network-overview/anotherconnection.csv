@@ -1,0 +1,5 @@
+sourcenode,sourceport,targetnode,targetport
+node99,xe-0/0/1,switch1,xe-0/0/4
+node99,xe-0/0/2,switch2,xe-0/0/4
+netapp99,xe-0/0/1,switch3,xe-0/0/4
+netapp99,xe-0/0/2,switch4,xe-0/0/4
