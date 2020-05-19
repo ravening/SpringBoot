@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: spring-cloud-stream-kafka
-        image: rakgenius/spring-cloud-stream-kafka:0.0.1
+        image: rakgenius/spring-cloud-stream-kafka:websocket-0.0.1
         ports:
         - containerPort: 8080
 ---
