@@ -12,6 +12,6 @@ public class PaymentValidatorImpl implements PaymentValidator {
 
     @Override
     public void calculateResult(PaymentEvent paymentEvent) {
-        LOGGER.info("Processing " + paymentEvent.getCreditCardNumber() + " " + paymentEvent.getAmount());
+        LOGGER.info("Processing payment: " + paymentEvent.getCreditCardNumber() + " " + paymentEvent.getAmount());
     }
 }

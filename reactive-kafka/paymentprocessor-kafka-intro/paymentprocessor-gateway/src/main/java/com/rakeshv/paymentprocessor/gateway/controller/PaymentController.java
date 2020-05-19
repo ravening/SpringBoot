@@ -22,7 +22,7 @@ public class PaymentController {
      * to handle requests in a non-blocking manner, enabling far more concurrent requests. The result will be sent over
      * HTTP through a mechanism called Server Sent Events
      **/
-    @PostMapping(value = "/payment")
+    @PostMapping(value = "/api/payments/validate/payment")
     public Mono<Void> doPayment(@RequestBody CreatePaymentCommand payment) {
         /**
          When calling the doPayment method, we send our payment information, getting a Mono<Void> in return.
@@ -31,7 +31,7 @@ public class PaymentController {
         return paymentGateway.doPayment(payment);
     }
 
-    @GetMapping("/dopayment")
+    @GetMapping("/api/payments/validate/dopayment")
     public Mono<Void> payment() {
         CreatePaymentCommand paymentCommand = new CreatePaymentCommand("abcd", "efgh-ijkl", "100");
         return paymentGateway.doPayment(paymentCommand);

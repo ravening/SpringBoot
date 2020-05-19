@@ -62,7 +62,7 @@ public class PaymentValidatorListenerImpl {
                     processEvent(paymentEvent);
                     r.receiverOffset().acknowledge();
                 })
-                .doOnEach(r -> log.info("Received : {}", r))
+                .doOnEach(r -> log.info("Received message: {}", r))
                 .doOnError(error -> log.error("Error : {}", error))
                 .doOnComplete(() -> log.info("Completed"))
                 .subscribe();
