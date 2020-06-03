@@ -1,4 +1,4 @@
-package com.programmerfriend.websockets.twitterwebsockets;
+package com.rakeshv.websockets.twitterwebsockets;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

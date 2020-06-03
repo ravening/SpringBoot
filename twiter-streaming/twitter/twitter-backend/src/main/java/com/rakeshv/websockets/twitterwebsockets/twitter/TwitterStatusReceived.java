@@ -1,4 +1,4 @@
-package com.programmerfriend.websockets.twitterwebsockets;
+package com.rakeshv.websockets.twitterwebsockets.twitter;
 
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
