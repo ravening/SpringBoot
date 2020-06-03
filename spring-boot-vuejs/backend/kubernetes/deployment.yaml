@@ -17,7 +17,7 @@ spec:
       containers:
         - name: spring-boot-vuejs
           imagePullPolicy: Always
-          image: rakgenius/spring-boot-vuejs:0.0.6
+          image: rakgenius/spring-boot-vuejs:0.0.1
           ports:
             - containerPort: 8080
 ---

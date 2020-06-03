@@ -5,22 +5,18 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     # Dont use the below line. This will replace all subpaths with "/"
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    # nginx.ingress.kubernetes.io/rewrite-target: /
 
     # Using the below line will replace the second string after "greetings"
     # so you should access /greetings/greetings/readmessage for the endpoint to work
     # So just dont use any rewrites
-#    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    # nginx.ingress.kubernetes.io/rewrite-target: /$1
 spec:
-  backend:
-    serviceName: default-http-backend
-    servicePort: 80
   rules:
-    - host: spring-boot-vuejs
     - http:
         paths:
-          - path: /
-            #      - path: /greetings(/|$)(.*)
-            backend:
+          - backend:
               serviceName: vuejs-frontend
-              servicePort: 8080
+              servicePort: 80
+            path: /courses
+
