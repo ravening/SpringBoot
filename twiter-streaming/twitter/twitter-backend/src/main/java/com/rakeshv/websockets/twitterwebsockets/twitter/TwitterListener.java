@@ -1,6 +1,5 @@
-package com.programmerfriend.websockets.twitterwebsockets.twitter;
+package com.rakeshv.websockets.twitterwebsockets.twitter;
 
-import com.programmerfriend.websockets.twitterwebsockets.TwitterStatusReceived;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
@@ -21,6 +20,7 @@ public class TwitterListener implements StatusListener {
 
     @Override
     public void onException(Exception e) {
+        log.error("Exception happened: {}", e.getMessage());
     }
 
     @Override
@@ -33,6 +33,7 @@ public class TwitterListener implements StatusListener {
 
     @Override
     public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
+        log.info("Deleting");
     }
 
     @Override

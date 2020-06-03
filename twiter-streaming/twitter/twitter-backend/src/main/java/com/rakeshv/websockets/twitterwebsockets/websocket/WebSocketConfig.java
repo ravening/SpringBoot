@@ -1,4 +1,4 @@
-package com.programmerfriend.websockets.twitterwebsockets.websocket;
+package com.rakeshv.websockets.twitterwebsockets.websocket;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

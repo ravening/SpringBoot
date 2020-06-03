@@ -1,12 +1,13 @@
-package com.programmerfriend.websockets.twitterwebsockets.websocket;
+package com.rakeshv.websockets.twitterwebsockets.websocket;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.programmerfriend.websockets.twitterwebsockets.TwitterStatusReceived;
+import com.rakeshv.websockets.twitterwebsockets.twitter.TwitterStatusReceived;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;

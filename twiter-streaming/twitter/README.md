@@ -2,7 +2,7 @@
 
 This is an example building a Twitter WebSocket Stream using Spring Boot and twitter4J.
 
-Folder Structur:
+Folder Structure:
 * **twitter-backend:**<br/>
   Spring Boot Service (Java 11) providing a Websocket connection at ws://localhost:8080/tweets.
   It also serves an example JS Frontend at http://localhost:8080.

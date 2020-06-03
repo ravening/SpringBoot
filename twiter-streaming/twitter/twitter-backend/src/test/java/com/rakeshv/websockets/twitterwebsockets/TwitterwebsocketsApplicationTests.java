@@ -1,4 +1,4 @@
-package com.programmerfriend.websockets.twitterwebsockets;
+package com.rakeshv.websockets.twitterwebsockets;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
