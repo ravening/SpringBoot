@@ -1,0 +1,29 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    jkube.io/git-branch: reactive-kafka
+    jkube.io/git-url: https://github.com/ravening/SpringBoot.git
+    jkube.io/git-commit: 70a04f5eda89988cd5c9280bd730d8dbbb55c952
+    jkube.io/scm-url: https://github.com/spring-projects/spring-boot/spring-boot-starter-parent/paymentprocessor/paymentprocessor-gateway
+    jkube.io/scm-tag: HEAD
+    prometheus.io/port: "9779"
+    prometheus.io/scrape: "true"
+  labels:
+    expose: "true"
+    app: paymentprocessor-gateway
+    provider: jkube
+    version: 0.0.1
+    group: com.rakeshv.paymentprocessor
+  name: paymentprocessor-gateway
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: paymentprocessor-gateway
+    provider: jkube
+    group: com.rakeshv.paymentprocessor

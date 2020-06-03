@@ -1,0 +1,28 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    jkube.io/git-branch: reactive-kafka
+    jkube.io/git-url: https://github.com/ravening/SpringBoot.git
+    jkube.io/git-commit: 70a04f5eda89988cd5c9280bd730d8dbbb55c952
+    jkube.io/scm-url: https://github.com/spring-projects/spring-boot/spring-boot-starter-parent/paymentprocessor/paymentprocessor-paymentvalidator
+    jkube.io/scm-tag: HEAD
+    prometheus.io/port: "9779"
+    prometheus.io/scrape: "true"
+  labels:
+    app: paymentprocessor-paymentvalidator
+    provider: jkube
+    version: 0.0.1
+    group: com.rakeshv.paymentprocessor
+  name: paymentprocessor-paymentvalidator
+spec:
+  ports:
+  - name: sunproxyadmin
+    port: 8081
+    protocol: TCP
+    targetPort: 8081
+  selector:
+    app: paymentprocessor-paymentvalidator
+    provider: jkube
+    group: com.rakeshv.paymentprocessor
