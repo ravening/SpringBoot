@@ -1,3 +1,5 @@
+docker run --publish=7474:7474 --publish=7687:7687  -d -v $HOME/neo4j/data:/data -v $HOME/neo4j/logs:/logs -v $HOME/neo4j/import:/var/lib/neo4j/import -v $HOME/neo4j/plugins:/plugins neo4j:3.5.14
+
 ## Delete all
 ```
 MATCH (n) DETACH DELETE n
