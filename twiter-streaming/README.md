@@ -1,14 +1,60 @@
-# springboot-websockets
-
-This is part of a tutorial series at https://programmerfriend.com
+# springboot-websockets with Twitter
 
 ## What it is
 
-It is a collection of websocket tutorials
+Spring boot project used to stream tweets and display on browser using websockets
 
 For now it contains:
 
-* **twitter**: described in the Tutorial https://programmerfriend.com/spring-boot-websocket/
-  <br> A twitter stream built with Twitter4J. It sends the received tweets via a WebSocket Connection to the frontends.
-  <br> There are two frontends: Vanilla JS (inside the Spring Boot application's index.html) and a React Frontend (living in the twitter-frontend subfolder).<br>
-  If you want to see more details, have a look in the [twitter-folder](twitter) itself.
+1. A backend java app which fetches the tweets
+2. A frontend react app which displays the stream of tweets
+
+## Getting started with the project
+
+###First build the backend app
+
+```
+cd twitter-backend
+mvn clean package -DskipTests
+```
+
+Now run the backend application
+
+```
+java -jar target/twitter-stream.jar
+```
+
+This will run on port 8080 and start streaming tweets on topic `java`
+
+### Now build the frontend app
+
+```
+cd twitter-frontend
+npm start
+```
+
+Navigate to `http://localhost:3000`
+
+By default it streams all tweets containing keyword `java`.
+
+To change the keyword, hit the below endpoint and enter your keyword
+
+```
+http://localhost:8080/twitter/stream/<YOUR KEYWORD>
+```
+
+Now the tweets for new keyword will automatically stream on port 3000
+
+
+## Other endpoints
+
+1. To display the timeline of the current user
+```
+http://localhost:8080/twitter/timeline
+```
+
+2. To search for tweets containing a keyword
+```
+http://localhost:8080/twitter/search/<KEYWORD>
+```
+

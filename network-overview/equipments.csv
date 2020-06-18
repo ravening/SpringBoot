@@ -1,0 +1,7 @@
+name,ipaddress,model,version,type
+switch1,1.1.1.1,ARISTA,,SWITCH
+switch2,2.2.2.2,JUNIPER,,ROUTER
+switch3,3.3.3.3,CISCO,3.3,SWITCH
+switch4,4.4.4.4,LEASEWB,4.4,ROUTER
+node99,5.5.5.5,DELL,3.14,HYPERVISOR
+netapp99,6.6.6.6,NETAPP,1.12,STORAGE
