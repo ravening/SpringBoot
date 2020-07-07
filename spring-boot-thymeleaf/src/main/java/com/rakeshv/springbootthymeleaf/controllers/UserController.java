@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 
@@ -21,11 +22,13 @@ public class UserController {
 
     @GetMapping("/signup")
     public String showSignUpForm(User user) {
+        log.info("signing up new user");
         return "add-user";
     }
 
     @PostMapping("/adduser")
     public String addUser(@Valid User user, BindingResult result, Model model) {
+        log.info("adding new user");
         if (result.hasErrors()) {
             return "add-user";
         }
@@ -37,6 +40,7 @@ public class UserController {
 
     @GetMapping("/edit/{id}")
     public String showUpdateForm(@PathVariable("id") Long id, Model model) {
+        log.info("editing user");
         User user = userService.getUserById(id)
                 .orElseThrow(() ->
                         new IllegalArgumentException("Unable to find user with id: " + id));

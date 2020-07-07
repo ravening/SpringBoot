@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.rakeshv</groupId>
     <artifactId>spring-boot-thymeleaf</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <name>spring-boot-thymeleaf</name>
     <description>Demo project for Spring Boot</description>
 
@@ -106,7 +106,14 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.eclipse.jkube</groupId>
+                <artifactId>kubernetes-maven-plugin</artifactId>
+                <version>1.0.0-alpha-3</version>
+            </plugin>
         </plugins>
+        <finalName>spring-boot-thymeleaf</finalName>
     </build>
 
 </project>
