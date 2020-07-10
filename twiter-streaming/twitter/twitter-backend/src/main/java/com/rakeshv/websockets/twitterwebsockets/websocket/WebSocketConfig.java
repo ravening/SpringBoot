@@ -15,6 +15,6 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry webSocketHandlerRegistry) {
-        webSocketHandlerRegistry.addHandler(websocketHandler, "/tweets").setAllowedOrigins("*");
+        webSocketHandlerRegistry.addHandler(websocketHandler, "/twitter").setAllowedOrigins("*");
     }
 }
