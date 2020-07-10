@@ -16,6 +16,7 @@
 
 	<properties>
 		<java.version>11</java.version>
+		<spring-boot.build-image.imageName>twitter-stream</spring-boot.build-image.imageName>
 	</properties>
 
 	<dependencies>
@@ -61,6 +62,29 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>2.4.0</version>
+				<configuration>
+					<from>
+					<image>adoptopenjdk/openjdk11:alpine-jre</image>
+					</from>
+				<container>
+					<useCurrentTimestamp>true</useCurrentTimestamp>
+					<ports>
+						<port>8080</port>
+					</ports>
+				</container>
+					<to>
+						<image>springbootjib</image>
+					<tags>
+						<tag>${project.version}</tag>
+					</tags>
+					</to>
+				</configuration>
 			</plugin>
 		</plugins>
 		<finalName>twitter-stream</finalName>

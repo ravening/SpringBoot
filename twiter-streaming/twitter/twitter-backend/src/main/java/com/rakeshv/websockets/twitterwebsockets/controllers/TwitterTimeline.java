@@ -4,6 +4,7 @@ import com.rakeshv.websockets.twitterwebsockets.service.TwitterService;
 import com.rakeshv.websockets.twitterwebsockets.service.TwitterStreamConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/twitter")
 @Slf4j
+@CrossOrigin("*")
 public class TwitterTimeline {
     @Autowired
     TwitterService twitterService;
