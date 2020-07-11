@@ -71,7 +71,7 @@ class App extends Component {
           <Table messages={messages} addMessage={this.addMessage}/>
         </header>
 
-        <Websocket url='ws://localhost:8080/twitter'
+        <Websocket url='ws://localhost:8080/twitter/tweets/websocket'
               onMessage={this.handleData.bind(this)}/>
       </div>
     );

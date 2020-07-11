@@ -1,0 +1,31 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    jkube.io/git-branch: master
+    jkube.io/git-url: https://github.com/ravening/SpringBoot.git
+    jkube.io/git-commit: 2c1771fed23a8d654ef111b9d583e93f173ac74e
+    jkube.io/scm-url: https://github.com/spring-projects/spring-boot/twitterwebsockets
+    jkube.io/scm-tag: HEAD
+    jkube.io/issue-system: GitHub
+    jkube.io/issue-tracker-url: https://github.com/spring-projects/spring-boot/issues
+    prometheus.io/port: "9779"
+    prometheus.io/scrape: "true"
+  labels:
+    expose: "true"
+    app: twitterwebsockets
+    provider: jkube
+    version: 0.0.1
+    group: com.programmerfriend.websockets
+  name: twitterwebsockets
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: twitterwebsockets
+    provider: jkube
+    group: com.programmerfriend.websockets
