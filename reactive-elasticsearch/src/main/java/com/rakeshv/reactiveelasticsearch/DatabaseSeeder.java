@@ -15,6 +15,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -61,7 +62,8 @@ public class DatabaseSeeder {
                     .age(r.nextInt(100))
                     .position("developer-" + r.nextInt(10))
                     .department(department)
-                    .organization(organization).build();
+                    .organization(organization)
+                    .timestamp(new Date()).build();
             employees.add(employee);
         }
 
