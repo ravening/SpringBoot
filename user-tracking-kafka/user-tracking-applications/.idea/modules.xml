@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/user-tracking-producer/src/main/main1.iml" filepath="$PROJECT_DIR$/user-tracking-producer/src/main/main1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/user-tracking-consumer/user-tracking-consumer.iml" filepath="$PROJECT_DIR$/user-tracking-consumer/user-tracking-consumer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/user-tracking-consumer/user-tracking-consumer.iml" filepath="$PROJECT_DIR$/user-tracking-consumer/user-tracking-consumer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/user-tracking-producer/user-tracking-producer.iml" filepath="$PROJECT_DIR$/user-tracking-producer/user-tracking-producer.iml" />
+    </modules>
+  </component>
+</project>
