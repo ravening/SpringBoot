@@ -1,0 +1,19 @@
+{
+  "servings": [
+    {
+    "foodType": "Pizza",
+    "status": "CREATED",
+    "size": "2"
+    },
+    {
+      "foodType": "Fries",
+      "status": "CREATED",
+      "size": "4"
+    } 
+  ],
+  "deliveryAddress": {
+    "street": "Orange St",
+    "number": "22",
+    "city": "London"
+  }
+}

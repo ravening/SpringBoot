@@ -1,0 +1,15 @@
+// Start the entire platform
+docker-compose up -d
+
+// Generate Avro classes
+mvn generate-sources
+
+// Produce orders
+( docker exec -i broker-1 kafka-console-producer --broker-list broker-1:29092 --topic orders ) < order1.json
+
+( docker exec -i broker-1 kafka-console-producer --broker-list broker-1:29092 --topic orders ) < order2.json
+
+( docker exec -i broker-2 kafka-console-producer --broker-list broker-2:29093 --topic orders ) < order3.json
+
+// Stop all docker containers
+docker-compose down

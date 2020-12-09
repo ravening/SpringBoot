@@ -1,0 +1,63 @@
+{
+  "fields": [
+    {
+      "name": "deliveryAddress",
+      "type": {
+        "type": "record",
+        "name": "DeliveryAddress",
+        "fields": [
+          {
+            "name": "street",
+            "type": "string"
+          },
+          {
+            "name": "number",
+            "type": "int"
+          },
+          {
+            "name": "city",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "servings",
+      "type": {
+        "type": "array",
+        "name": "Servings",
+        "items": [
+          {
+            "type": "record",
+            "name": "Serving",
+            "fields": [
+              {
+                "name": "foodType",
+                "type": "string"
+              },
+              {
+                "name": "servingStatus",
+                "type": {
+                  "type": "enum",
+                  "name": "ServingStatus",
+                  "symbols": [
+                    "CREATED",
+                    "COOKING",
+                    "DONE"
+                  ]
+                }
+              },
+              {
+                "name": "size",
+                "type": "int"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "name": "ServingsValue",
+  "namespace": "com.pluralsight.streaming.data.model",
+  "type": "record"
+}

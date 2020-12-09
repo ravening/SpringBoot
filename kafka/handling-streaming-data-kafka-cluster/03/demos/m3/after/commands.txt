@@ -1,0 +1,8 @@
+// Start the entire platform
+docker-compose up -d
+
+// Generate Avro classes
+mvn generate-sources
+
+// Stop all docker containers
+docker-compose down

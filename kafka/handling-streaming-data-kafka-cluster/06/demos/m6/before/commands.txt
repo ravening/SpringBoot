@@ -1,0 +1,5 @@
+// Start the entire platform
+docker-compose up -d
+
+// Stop all docker containers
+docker-compose down
