@@ -25,7 +25,7 @@ public String getName() {
 }
 }
 
-field based: easy to read, no need to expore getters
+field based: easy to read, no need to expose getters
 
 primary key:
 simple or composite
@@ -36,4 +36,23 @@ public, no args constr, serializable, override equals and hashcode
 
 genratedvalue is only for simple primary key
 can be applied to field or property
+
+good to specify fetch type as lazy for -to-one relations
+
+dont use CascadeType.REMOVE or ALL
+
+Prefer using Set instead of List for many to many relationship
+
+Use @Fetch(FetchMode.SUBSELECT) to preven n+1 queries problem
+lets say we have 5 passengers and each passenger has 5 tickets.
+when we fetch the passengers, it will execute 6 queries
+1 query to fetch all passengers and 5 queries to get tickets for each passengers
+if we use above annotation then it uses only 2 queries
+
+If we want to fetch all passengers and their tickets in just one query
+then use join fetch on custom query in interface
+
+@Query("select distinct p from passengers p join fetch p.tickets")
+List<Passengers> findAll();
+
 

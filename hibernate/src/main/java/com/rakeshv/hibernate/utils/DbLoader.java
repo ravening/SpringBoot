@@ -3,6 +3,7 @@ package com.rakeshv.hibernate.utils;
 import com.rakeshv.hibernate.models.Airport;
 import com.rakeshv.hibernate.models.ContactAddress;
 import com.rakeshv.hibernate.models.Passengers;
+import com.rakeshv.hibernate.models.TicketKey;
 import com.rakeshv.hibernate.models.Tickets;
 import com.rakeshv.hibernate.repositories.AirportRepository;
 import com.rakeshv.hibernate.repositories.PassengersRepository;
@@ -64,6 +65,14 @@ public class DbLoader implements CommandLineRunner {
                 .number("CC0987")
                 .passengers(mike).build();
 
+        TicketKey key = TicketKey.builder()
+                .series("AA")
+                .seatNumber("1234").build();
+
+        Tickets ticket4 = Tickets.builder()
+//                .ticketKeyId(key)
+                .origin("Bucharest")
+                .destination("London").build();
 
         john.addTickets(ticket1);
         john.addTickets(ticket2);
@@ -75,6 +84,7 @@ public class DbLoader implements CommandLineRunner {
         ticketsRepository.save(ticket1);
         ticketsRepository.save(ticket2);
         ticketsRepository.save(ticket3);
+        ticketsRepository.save(ticket4);
         contactAddressService.saveContactAddress(contactAddress);
     }
 }

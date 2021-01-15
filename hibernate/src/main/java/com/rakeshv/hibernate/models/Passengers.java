@@ -1,12 +1,16 @@
 package com.rakeshv.hibernate.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -46,6 +50,7 @@ public class Passengers {
     private String name;
 
     @OneToMany(mappedBy = "passenger")
+    @JsonBackReference
     private List<ContactAddress> contactAddress;
 
     @Column(name = "STREET", table = "ADDRESSES", columnDefinition = "varchar(255) not null")
@@ -69,11 +74,13 @@ public class Passengers {
     @Column(name = "LINE_NUMBER", table = "PHONES", columnDefinition = "varchar(10) not null")
     private String lineNumber;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "AIRPORT_ID")
     private Airport airport;
 
     @OneToMany(mappedBy = "passengers")
+    // this is to avoid n+1 queries problem
+    @Fetch(FetchMode.SUBSELECT)
     private List<Tickets> tickets;
 
     public void addTickets(Tickets ticket) {
