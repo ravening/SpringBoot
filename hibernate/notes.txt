@@ -1,0 +1,39 @@
+Two types of access
+
+Field based and property based
+
+Annotations can be applied on field or getters
+Default is field based
+
+If @Id is present on field then entire class is field based else its property based
+
+It can be explicitly mentioned using @Access(AccessType.FIELD)
+
+for property mention AccessType.PROPERTY
+still we can assign FIELD to select variables
+
+ex:
+
+@Acess(AccessType.FIELD)
+class Passenger {
+@Id
+private int id
+
+@Access(AccessType.PROPERTY)
+public String getName() {
+    return name;
+}
+}
+
+field based: easy to read, no need to expore getters
+
+primary key:
+simple or composite
+
+rule for composite
+public, no args constr, serializable, override equals and hashcode
+
+
+genratedvalue is only for simple primary key
+can be applied to field or property
+

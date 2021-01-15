@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.SecondaryTable;
+import javax.persistence.SecondaryTables;
 import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,7 +27,15 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "PASSENGERS")
-@SecondaryTable(name = "ADDRESSES", pkJoinColumns = @PrimaryKeyJoinColumn(name = "PASSENGER_ID", referencedColumnName = "PASSENGER_ID"))
+//@SecondaryTable(name = "ADDRESSES", pkJoinColumns = @PrimaryKeyJoinColumn(name = "PASSENGER_ID", referencedColumnName = "PASSENGER_ID"))
+@SecondaryTables(
+        {
+                @SecondaryTable(name = "ADDRESSES",
+                        pkJoinColumns = @PrimaryKeyJoinColumn(name = "PASSENGER_ID", referencedColumnName = "PASSENGER_ID")),
+                @SecondaryTable(name = "PHONES",
+                    pkJoinColumns = @PrimaryKeyJoinColumn(name = "PASSENGER_ID", referencedColumnName = "PASSENGER_ID"))
+        }
+)
 public class Passengers {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,6 +59,15 @@ public class Passengers {
 
     @Column(name = "CITY", table = "ADDRESSES", columnDefinition = "varchar(25) not null")
     private String city;
+
+    @Column(name = "AREA_CODE", table = "PHONES", columnDefinition = "varchar(5) not null")
+    private String areaCode;
+
+    @Column(name = "PREFIX", table = "PHONES", columnDefinition = "varchar(5) not null")
+    private String prefix;
+
+    @Column(name = "LINE_NUMBER", table = "PHONES", columnDefinition = "varchar(10) not null")
+    private String lineNumber;
 
     @ManyToOne
     @JoinColumn(name = "AIRPORT_ID")

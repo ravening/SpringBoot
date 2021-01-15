@@ -40,6 +40,9 @@ public class DbLoader implements CommandLineRunner {
                 .airport(airport).build();
         Passengers mike = Passengers.builder()
                 .name("Michael Johnson")
+                .areaCode("302")
+                .prefix("231")
+                .lineNumber("123456")
                 .airport(airport).build();
 
         ContactAddress contactAddress = ContactAddress.builder()
