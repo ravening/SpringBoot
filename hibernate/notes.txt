@@ -56,3 +56,45 @@ then use join fetch on custom query in interface
 List<Passengers> findAll();
 
 
+Relations
+
+uni and bidirectional
+
+Many part is always the owning side
+owning side drive the updates
+
+@OneToMany, ManyToOne, OneToOne, ManyToMany
+
+@JonTable, cross reference table for mapping relationship
+its on the owning side of the relationship and receives parameters
+
+
+JoinColumn
+
+specifies column for joining an entity
+takes a name parameter and referencedColumnName parameter
+
+
+JoinColumns
+
+mapping for composite foreign keys
+groups @JoinColumn annotation
+
+
+Embeddable classes
+
+Fine grained classes representing the entity state
+dont have persistent identiy of their own
+cannot be shared across persistent entities
+exist only as part of the state of entity to which they belong
+must be annotated as @Embeddable
+can be customized using @AttributeOverride or @AttributeOverrides
+in the main class add @Embedded for the field where above class has to be embedded
+
+@ElementCollection
+@CollectionTable
+
+key and value can be either basic or embeddable class
+@MapKeyColumn
+@Column - specifies the column
+

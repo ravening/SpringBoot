@@ -6,15 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
-import java.io.Serializable;
 
 @Embeddable
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TicketKey implements Serializable {
-
-    private String series;
+public class EmbeddedAddress {
+    private String street;
     private String number;
+    private String zipCode;
+    private String city;
 }

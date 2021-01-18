@@ -8,14 +8,21 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.SecondaryTable;
@@ -24,6 +31,8 @@ import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Data
 @AllArgsConstructor
@@ -53,6 +62,14 @@ public class Passengers {
     @JsonBackReference
     private List<ContactAddress> contactAddress;
 
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "street", column = @Column(name = "PASSENGER_STREET")),
+            @AttributeOverride(name = "number", column = @Column(name = "PASSENGER_NUMBER")),
+            @AttributeOverride(name = "zipCode", column = @Column(name = "PASSENGER_ZIP_CODE")),
+            @AttributeOverride(name = "city", column = @Column(name = "PASSENGER_CITY"))
+    })
+    private EmbeddedAddress embeddedAddress;
     @Column(name = "STREET", table = "ADDRESSES", columnDefinition = "varchar(255) not null")
     private String street;
 
@@ -83,6 +100,17 @@ public class Passengers {
     @Fetch(FetchMode.SUBSELECT)
     private List<Tickets> tickets;
 
+    @ManyToMany(mappedBy = "manyPassengers")
+    private List<Tickets> manyTickets = new ArrayList<>();
+
+    @ElementCollection
+    @MapKeyColumn(name = "ATTRIBUTE_NAME")
+    @Column(name = "ATTRIBUTE_VALUE")
+    @CollectionTable(name = "PASSENGER_ATTRIBUTES", joinColumns = {
+            @JoinColumn(name = "PASSENGER_ID", referencedColumnName = "PASSENGER_ID")
+    })
+    private Map<String, String> attributes;
+
     public void addTickets(Tickets ticket) {
         if (tickets == null) {
             tickets = new ArrayList<>();
@@ -92,5 +120,23 @@ public class Passengers {
 
     public List<Tickets> getTickets() {
         return Collections.unmodifiableList(tickets);
+    }
+
+    public void addMultipleTickets(Tickets t) {
+        if (this.manyTickets == null) {
+            this.manyTickets = new ArrayList<>();
+        }
+        this.manyTickets.add(t);
+    }
+
+    public List<Tickets> getMultipleTickets() {
+        return Collections.unmodifiableList(manyTickets);
+    }
+
+    public void addAttribute(String key, String value) {
+        if (this.attributes == null) {
+            this.attributes = new ConcurrentHashMap<>();
+        }
+        this.attributes.put(key, value);
     }
 }
