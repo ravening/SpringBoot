@@ -84,7 +84,7 @@ groups @JoinColumn annotation
 Embeddable classes
 
 Fine grained classes representing the entity state
-dont have persistent identiy of their own
+dont have persistent identity of their own
 cannot be shared across persistent entities
 exist only as part of the state of entity to which they belong
 must be annotated as @Embeddable
@@ -98,3 +98,72 @@ key and value can be either basic or embeddable class
 @MapKeyColumn
 @Column - specifies the column
 
+
+Inheritence
+
+@MappedSuperclass
+@AttributeOverride
+@AssociationOverride
+
+3 mapping strategies
+1. single table per hierarchy
+All classes are mapped to single table
+Discriminator column is used to identify subclass
+good support for polymorphism
+requires nullable columns
+
+2. joined subclass
+fields specific to subclass are in separate table
+classes are separate tables
+join through primary key of super class which is FK of subclass
+more joins are needed. may lead to bad performance
+In our example, ticket_number, origin, price, destination are duplicated in both tables of subclass
+
+3. table per concrete entity. no table for super class.
+subclass has separate table
+all properties mapped to columns
+poor support for polymorphism
+lead to duplicate id's between tables
+
+Annotation for above
+@Inheritance
+@DiscriminatorColumn
+@DiscriminatorValue. only specified on concrete classes
+
+
+use AttributeConverter between state to db column
+
+
+entitymanager is an interface to interact with persistence context
+Entity states
+new, managed, removed, detached
+
+persist(), remove(), merge(), find(), lock(), detach(), refresh()
+
+persist
+new -> managed
+managed -> ignored
+detached -> exception
+removed -> managed
+
+
+Merge
+new -> new instance with same state
+managed -> ignored, cascaded to reference entities
+detached -> existing is loaded, state merged
+removed -> illegalargumentexception
+
+Remove
+new -> ignored
+managed -> removed
+detached -> illegalargexception
+removed -> ignored
+
+Refresh
+
+managed -> reladed from db
+
+
+commit -> end unit of work. no rollback
+
+flush -> no commit, just synchronization

@@ -1,6 +1,7 @@
 package com.rakeshv.hibernate.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.rakeshv.hibernate.converters.VipConverter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +13,7 @@ import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -110,6 +112,9 @@ public class Passengers {
             @JoinColumn(name = "PASSENGER_ID", referencedColumnName = "PASSENGER_ID")
     })
     private Map<String, String> attributes;
+
+    @Convert(converter = VipConverter.class)
+    private boolean vip;
 
     public void addTickets(Tickets ticket) {
         if (tickets == null) {

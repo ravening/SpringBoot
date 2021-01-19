@@ -6,21 +6,27 @@ import com.rakeshv.hibernate.models.Department;
 import com.rakeshv.hibernate.models.EmbeddableTicket;
 import com.rakeshv.hibernate.models.EmbeddedAddress;
 import com.rakeshv.hibernate.models.Manager;
+import com.rakeshv.hibernate.models.OneWayTicket;
 import com.rakeshv.hibernate.models.Passengers;
 import com.rakeshv.hibernate.models.Payment;
+import com.rakeshv.hibernate.models.ReturnTicket;
 import com.rakeshv.hibernate.models.TicketKey;
 import com.rakeshv.hibernate.models.Tickets;
 import com.rakeshv.hibernate.repositories.AirportRepository;
 import com.rakeshv.hibernate.repositories.DepartmentRepository;
 import com.rakeshv.hibernate.repositories.EmbeddableTicketRepository;
 import com.rakeshv.hibernate.repositories.ManagerRepository;
+import com.rakeshv.hibernate.repositories.OnewayTicketRepository;
 import com.rakeshv.hibernate.repositories.PassengersRepository;
 import com.rakeshv.hibernate.repositories.PaymentRepository;
+import com.rakeshv.hibernate.repositories.ReturnticketRepository;
 import com.rakeshv.hibernate.repositories.TicketsRepository;
 import com.rakeshv.hibernate.services.ContactAddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
 
 @Component
 public class DbLoader implements CommandLineRunner {
@@ -41,6 +47,10 @@ public class DbLoader implements CommandLineRunner {
     ManagerRepository managerRepository;
     @Autowired
     PaymentRepository paymentRepository;
+    @Autowired
+    OnewayTicketRepository onewayTicketRepository;
+    @Autowired
+    ReturnticketRepository returnticketRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -54,6 +64,11 @@ public class DbLoader implements CommandLineRunner {
                 .number("17")
                 .zipCode("85281")
                 .city("Arizona").build();
+        EmbeddedAddress address1 = EmbeddedAddress.builder()
+                .street("Fowlers Ave")
+                .number("452")
+                .zipCode("95059")
+                .city("Fremont").build();
         Passengers john = Passengers.builder()
                 .name("John Smith")
                 .city("Boston")
@@ -61,14 +76,16 @@ public class DbLoader implements CommandLineRunner {
                 .street("Flowers street")
                 .zipCode("12345")
                 .embeddedAddress(address)
-                .airport(airport).build();
+                .airport(airport)
+                .vip(true).build();
         Passengers mike = Passengers.builder()
                 .name("Michael Johnson")
                 .areaCode("302")
                 .prefix("231")
                 .lineNumber("123456")
-                .embeddedAddress(address)
-                .airport(airport).build();
+                .embeddedAddress(address1)
+                .airport(airport)
+                .vip(false).build();
 
         john.addAttribute("VIP", "yes");
         john.addAttribute("FREQUENT_FLYER", "yes");
@@ -153,5 +170,21 @@ public class DbLoader implements CommandLineRunner {
 
         departmentRepository.save(accounting);
         managerRepository.save(sam);
+
+        OneWayTicket oneWayTicket = OneWayTicket.builder()
+                .latestDepartureDate(LocalDate.of(2021, 1, 26)).build();
+        oneWayTicket.setNumber("AA1234");
+        oneWayTicket.setPassengers(john);
+        ReturnTicket returnTicket = ReturnTicket.builder()
+                .latestReturnDate(LocalDate.of(2021, 3, 31)).build();
+        returnTicket.setNumber("BB5678");
+        returnTicket.setPassengers(mike);
+        onewayTicketRepository.save(oneWayTicket);
+        returnticketRepository.save(returnTicket);
+
+        OneWayTicket oneWayTicket1 = OneWayTicket.builder()
+                .latestDepartureDate(LocalDate.of(2020, 12, 31)).build();
+        oneWayTicket1.setNumber("CC9876");
+        onewayTicketRepository.save(oneWayTicket1);
     }
 }
