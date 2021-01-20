@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -46,6 +47,8 @@ public class Tickets  {
     private Passengers passengers;
 
     @ManyToMany
+    @JoinTable(name = "MANYMANY") // if name not mentioned then table name will be
+    // TICKETS_MANY_PASSENGERS
     private List<Passengers> manyPassengers = new ArrayList<>();
 
     public void addManyPassengers(Passengers p) {

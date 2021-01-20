@@ -14,7 +14,7 @@ still we can assign FIELD to select variables
 
 ex:
 
-@Acess(AccessType.FIELD)
+@Access(AccessType.FIELD)
 class Passenger {
 @Id
 private int id
@@ -34,16 +34,19 @@ rule for composite
 public, no args constr, serializable, override equals and hashcode
 
 
-genratedvalue is only for simple primary key
+generatedvalue is only for simple primary key
 can be applied to field or property
 
+Default is eager fetching. so all related entities are loaded from db
 good to specify fetch type as lazy for -to-one relations
+onetoone and manytoone is eager
+onetomany and manytomany is lazy
 
 dont use CascadeType.REMOVE or ALL
 
 Prefer using Set instead of List for many to many relationship
 
-Use @Fetch(FetchMode.SUBSELECT) to preven n+1 queries problem
+Use @Fetch(FetchMode.SUBSELECT) to prevent n+1 queries problem
 lets say we have 5 passengers and each passenger has 5 tickets.
 when we fetch the passengers, it will execute 6 queries
 1 query to fetch all passengers and 5 queries to get tickets for each passengers
@@ -99,31 +102,41 @@ key and value can be either basic or embeddable class
 @Column - specifies the column
 
 
-Inheritence
+Inheritance
 
 @MappedSuperclass
+They are not entities. they are not saved and queried
+
 @AttributeOverride
 @AssociationOverride
 
 3 mapping strategies
 1. single table per hierarchy
+@Inheritance(strategy = SINGLE_TABLE)
 All classes are mapped to single table
-Discriminator column is used to identify subclass
+Discriminator column is used to identify subclass using DTYPE(varchar)
+can be changed using @DiscriminatorColumn(name = "DISC", discriminatorType=CHAR)
 good support for polymorphism
 requires nullable columns
+column of child entities should be nullable
+if one entity has marked column as nonnullable and other entitie doesnt have any relationship to it
+then inserting with null value is not possible
 
 2. joined subclass
+@Inheritance(strategy = JOINED)
 fields specific to subclass are in separate table
 classes are separate tables
 join through primary key of super class which is FK of subclass
 more joins are needed. may lead to bad performance
 In our example, ticket_number, origin, price, destination are duplicated in both tables of subclass
+The deeper the hierarchy, the more deeper the joins needed
 
 3. table per concrete entity. no table for super class.
 subclass has separate table
-all properties mapped to columns
+all properties of root class are mapped to columns of each subclass
 poor support for polymorphism
-lead to duplicate id's between tables
+lead to duplicate id's and columns between tables
+no discriminator column
 
 Annotation for above
 @Inheritance
@@ -133,12 +146,14 @@ Annotation for above
 
 use AttributeConverter between state to db column
 
+Entity lifecycle
 
 entitymanager is an interface to interact with persistence context
 Entity states
 new, managed, removed, detached
 
 persist(), remove(), merge(), find(), lock(), detach(), refresh()
+when entity is loaded from db then they are in Managed state
 
 persist
 new -> managed
@@ -161,9 +176,71 @@ removed -> ignored
 
 Refresh
 
-managed -> reladed from db
+managed -> reloaded from db
 
 
 commit -> end unit of work. no rollback
 
 flush -> no commit, just synchronization
+
+pre/post events
+
+@PrePersist
+@PostPersist
+@PreUpdate
+@PostUpdate
+@PreRemove
+@PostRemove
+@PostLoad
+
+
+OneToOne and ManyToOne is mapped using join column
+onetomany and manytomany is mapped using join table (default)
+
+
+onetoone by default has eager fetch
+
+Preferable to use set for onetomany or manytomany
+
+
+Query
+
+JPQL uses object fields and not table/column names
+
+select <clause>
+from <clause>
+[where | order by | group by | having]
+<function avg, count max ,min sum>
+<operators>
+
+select b
+from Book b
+where b.unitCost > 100 // not b.unit_cost
+
+where b.title like '%java%'(multi character wildcard) or '_java_'(single character wildcard)
+
+
+Examples
+
+select c from CD c
+select b from Book b where lower(b.title) like '%java%'
+positional parameters query can be used using ?1 ?2 and so on
+query.setParameter(1, unitCost)
+
+or
+
+where b.publicationDate < :pubDate
+query.setParameter("pubDate", LocalDate.now())
+
+pagination
+
+query.setMaxResults(10)
+
+namedquery are defined on entity class using @NamedQuery
+multiple named queries are possible
+@NamedQuery(name = Book.FINDALL, query = "select b from Book b")
+@NamedQuery(name = "ExpensiveBooks", query = "select b from Book b where b.unitCost > 29")
+
+Query query = em.createNamedQuery("ExpensiveBooks")
+List books = query.getResultList()
+

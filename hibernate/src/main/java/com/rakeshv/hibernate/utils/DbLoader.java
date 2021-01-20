@@ -1,21 +1,27 @@
 package com.rakeshv.hibernate.utils;
 
 import com.rakeshv.hibernate.models.Airport;
+import com.rakeshv.hibernate.models.CD;
 import com.rakeshv.hibernate.models.ContactAddress;
 import com.rakeshv.hibernate.models.Department;
 import com.rakeshv.hibernate.models.EmbeddableTicket;
 import com.rakeshv.hibernate.models.EmbeddedAddress;
 import com.rakeshv.hibernate.models.Manager;
+import com.rakeshv.hibernate.models.Musician;
 import com.rakeshv.hibernate.models.OneWayTicket;
 import com.rakeshv.hibernate.models.Passengers;
 import com.rakeshv.hibernate.models.Payment;
 import com.rakeshv.hibernate.models.ReturnTicket;
 import com.rakeshv.hibernate.models.TicketKey;
 import com.rakeshv.hibernate.models.Tickets;
+import com.rakeshv.hibernate.models.inheritance.Author;
 import com.rakeshv.hibernate.repositories.AirportRepository;
+import com.rakeshv.hibernate.repositories.AuthorRepository;
+import com.rakeshv.hibernate.repositories.CdRepository;
 import com.rakeshv.hibernate.repositories.DepartmentRepository;
 import com.rakeshv.hibernate.repositories.EmbeddableTicketRepository;
 import com.rakeshv.hibernate.repositories.ManagerRepository;
+import com.rakeshv.hibernate.repositories.MusicianRepository;
 import com.rakeshv.hibernate.repositories.OnewayTicketRepository;
 import com.rakeshv.hibernate.repositories.PassengersRepository;
 import com.rakeshv.hibernate.repositories.PaymentRepository;
@@ -27,6 +33,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Component
 public class DbLoader implements CommandLineRunner {
@@ -51,6 +58,12 @@ public class DbLoader implements CommandLineRunner {
     OnewayTicketRepository onewayTicketRepository;
     @Autowired
     ReturnticketRepository returnticketRepository;
+    @Autowired
+    CdRepository cdRepository;
+    @Autowired
+    MusicianRepository musicianRepository;
+    @Autowired
+    AuthorRepository authorRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -186,5 +199,37 @@ public class DbLoader implements CommandLineRunner {
                 .latestDepartureDate(LocalDate.of(2020, 12, 31)).build();
         oneWayTicket1.setNumber("CC9876");
         onewayTicketRepository.save(oneWayTicket1);
+
+        Musician musician = Musician.builder()
+                .firstName("Linkin")
+                .lastName("Park")
+                .bio("An alternate rock band")
+                .dateOfBirth(LocalDate.of(1990, 1, 1))
+                .preferredInstrument("Guitar").build();
+
+        CD cd = CD.builder()
+                .title("Hybrid theory")
+                .description("New album by LP")
+                .unitCost(25.50)
+                .totalDuration(90.15)
+                .genre("Alternate Rock")
+                .musicians(Set.of(musician)).build();
+
+//        musicianRepository.save(musician);
+        cdRepository.save(cd);
+
+        Author author = Author.builder()
+                .firstName("John")
+                .lastName("Doe")
+                .preferredLanguage("EN")
+                .dateOfBirth(LocalDate.of(2011, 1, 31)).build();
+        authorRepository.save(author);
+
+        try {
+            Thread.sleep(10000);
+        } catch (Exception e){}
+
+        author.setDateOfBirth(LocalDate.of(1991, 1, 31));
+        authorRepository.save(author);
     }
 }
