@@ -244,3 +244,8 @@ multiple named queries are possible
 Query query = em.createNamedQuery("ExpensiveBooks")
 List books = query.getResultList()
 
+Query dsl can begin with
+findBy, queryBy, readBy, countBy, getBy, findFirst
+it uses JPA attribute names for criteria
+
+criterias can be combined with And Or
