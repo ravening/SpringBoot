@@ -5,6 +5,9 @@ import com.pluralsight.conferencedemo.repositories.SessionRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
@@ -40,5 +43,11 @@ public class SessionTest {
     public void testJapLessThan() {
         List<Session> sessions = sessionJpaRepository.findBySessionLengthLessThan(45);
         assertTrue(sessions.size() > 0);
+    }
+
+    @Test
+    public void testPagingSorting() {
+        Page<Session> page = sessionJpaRepository.getSessionsWithNameLike("S", PageRequest.of(1, 5, Sort.by(Sort.Direction.DESC, "sessionLength")));
+        assertTrue(page.getTotalElements() > 0);
     }
 }

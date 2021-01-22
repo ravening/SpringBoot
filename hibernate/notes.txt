@@ -236,10 +236,18 @@ pagination
 
 query.setMaxResults(10)
 
-namedquery are defined on entity class using @NamedQuery
+namedquery are defined on entity class using @NamedQuery or @NamedQueries
+validated at app startup
 multiple named queries are possible
 @NamedQuery(name = Book.FINDALL, query = "select b from Book b")
 @NamedQuery(name = "ExpensiveBooks", query = "select b from Book b where b.unitCost > 29")
+
+// @NamedQuery(name = "<ENtity name>.someFunctionName", query = "... :coolname")
+is equivalent to
+
+interface repo extends Jpa<Entity name, Long> {
+  someFunctionName(@Param("coolname")
+}
 
 Query query = em.createNamedQuery("ExpensiveBooks")
 List books = query.getResultList()
@@ -249,3 +257,52 @@ findBy, queryBy, readBy, countBy, getBy, findFirst
 it uses JPA attribute names for criteria
 
 criterias can be combined with And Or
+
+we can pass named parameters to @Query annotation using @Param
+@Query(" :maxPrice")
+func(@Param("maxPrice") BigDecimal maxPrice)
+
+enhanced syntax
+@Query(" like %?1")
+func(String name)
+
+use nativeQuery = true to run sql queries
+this has vendor lockin
+
+modifyable queries
+@Modifying
+@Query("update ...")
+
+
+Query types
+
+sql
+jpql
+query dsl
+
+
+Entities -> NamedQuery and NamedNativeQuery
+Jpa repository -> NamedQuery, NamedNativeQuery, Query, Query dsl
+
+Many prefer to keep queries in Entity
+
+Method with @Query have highest precedence
+method that match a named or native named query
+methods that follow query dsl keyword naming structure
+
+
+Audit annotations
+
+@CreatedBy, @LastModifiedBy, @CreatedDate and @LastModifiedDate
+last two are automatically set
+
+Implement AuditorAware interface
+
+use @EnableJpaAuditing to enable auditing
+
+
+Locking
+
+Optimistic locking and pessimistic
+
+@Lock(LockModeType.PESSIMISTIC_WRITE)
