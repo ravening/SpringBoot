@@ -16,7 +16,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,7 +34,11 @@ import java.util.Set;
 @Table(name = "account")
 public class Account {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    // AUTO is the default generation strategy
+//    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "account_table_generator")
+    @TableGenerator(name = "account_table_generator", table = "ifinances_keys",
+            pkColumnName = "PK_NAME", valueColumnName = "PK_VALUE")
     @Column(name = "ACCOUNT_ID")
     private Long accountId;
 

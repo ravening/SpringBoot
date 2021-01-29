@@ -306,3 +306,14 @@ Locking
 Optimistic locking and pessimistic
 
 @Lock(LockModeType.PESSIMISTIC_WRITE)
+
+
+Database provides 3 types of date or time datatypes
+
+datetime, date, time
+
+mysql has timestamp which is different from time
+
+3 value types
+
+basic, composite and collection
