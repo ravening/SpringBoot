@@ -62,4 +62,12 @@ public class Bank {
     @MapKeyColumn(name="POSITION_TYPE")
     @Column(name="NAME")
     private Map<String, String> contacts = new HashMap<String, String>();
+
+
+    public Map<String, String> getContacts() {
+        if (contacts == null) {
+            contacts = new HashMap<>();
+        }
+        return contacts;
+    }
 }

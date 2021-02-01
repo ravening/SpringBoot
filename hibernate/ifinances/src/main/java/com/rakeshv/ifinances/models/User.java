@@ -5,16 +5,30 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Formula;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -56,7 +70,27 @@ public class User {
     @Transient
     private boolean valid;
 
+//    @ElementCollection
+//    @CollectionTable(name = "user_address", joinColumns = @JoinColumn(name = "USER_ID"))
+//    @AttributeOverrides({@AttributeOverride(name = "addressLine1", column = @Column(name = "USER_ADDRESS_LINE_1")),
+//        @AttributeOverride(name = "addressLine2", column = @Column(name = "USER_ADDRESS_LINE_2"))
+//    })
+    @Embedded
+    private Address address;
 //    @Formula("YEAR(CURDATE()) - YEAR(BIRTH_DATE)")
     @Formula("lower(datediff(curdate(),BIRTH_DATE)/365)")
     private int age;
+
+////    @OneToOne(mappedBy = "user")
+//    private Credential credential;
+
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "users")
+    private Set<Account> accounts = new HashSet<>();
+
+    public Set<Account> getAccounts() {
+        if (accounts == null) {
+            accounts = new HashSet<>();
+        }
+        return accounts;
+    }
 }

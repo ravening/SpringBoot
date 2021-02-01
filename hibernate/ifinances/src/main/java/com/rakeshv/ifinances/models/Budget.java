@@ -44,4 +44,11 @@ public class Budget {
     @JoinTable(name="BUDGET_TRANSACTION", joinColumns=@JoinColumn(name="BUDGET_ID"),
             inverseJoinColumns=@JoinColumn(name="TRANSACTION_ID"))
     private List<Transaction> transactions = new ArrayList<>();
+
+    public List<Transaction> getTransactions() {
+        if (transactions == null) {
+            transactions = new ArrayList<>();
+        }
+        return transactions;
+    }
 }

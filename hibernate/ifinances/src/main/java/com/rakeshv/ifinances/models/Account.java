@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -80,4 +81,18 @@ public class Account {
 
     @Column(name = "CREATED_BY")
     private String createdBy;
+
+    public List<Transaction> getTransactions() {
+        if (transactions == null)
+            transactions = new ArrayList<>();
+        return transactions;
+    }
+
+
+    public Set<User> getUsers() {
+        if (users == null) {
+            users = new HashSet<>();
+        }
+        return users;
+    }
 }
