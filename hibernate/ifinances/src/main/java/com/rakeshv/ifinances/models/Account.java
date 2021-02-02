@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -42,6 +44,10 @@ public class Account {
             pkColumnName = "PK_NAME", valueColumnName = "PK_VALUE")
     @Column(name = "ACCOUNT_ID")
     private Long accountId;
+
+    @Column(name = "ACCOUNT_TYPE")
+    @Enumerated(value = EnumType.STRING)
+    private AccountTypeEnum accountTypeEnum;
 
     @ManyToMany(cascade= CascadeType.ALL)
     @JoinTable(name="USER_ACCOUNT", joinColumns=@JoinColumn(name="ACCOUNT_ID"),

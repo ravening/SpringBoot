@@ -150,7 +150,7 @@ Entity lifecycle
 
 entitymanager is an interface to interact with persistence context
 Entity states
-new, managed, removed, detached
+new, managed, removed, detached, transient
 
 persist(), remove(), merge(), find(), lock(), detach(), refresh()
 when entity is loaded from db then they are in Managed state

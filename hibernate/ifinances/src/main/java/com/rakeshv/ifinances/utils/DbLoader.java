@@ -1,17 +1,28 @@
 package com.rakeshv.ifinances.utils;
 
 import com.rakeshv.ifinances.models.Account;
+import com.rakeshv.ifinances.models.AccountTypeEnum;
 import com.rakeshv.ifinances.models.Address;
 import com.rakeshv.ifinances.models.Bank;
+import com.rakeshv.ifinances.models.Bond;
 import com.rakeshv.ifinances.models.Budget;
 import com.rakeshv.ifinances.models.Credential;
+import com.rakeshv.ifinances.models.Currency;
+import com.rakeshv.ifinances.models.Market;
+import com.rakeshv.ifinances.models.Portfolio;
+import com.rakeshv.ifinances.models.Stock;
 import com.rakeshv.ifinances.models.TimeTest;
 import com.rakeshv.ifinances.models.Transaction;
 import com.rakeshv.ifinances.models.User;
 import com.rakeshv.ifinances.repositories.AccountRepository;
 import com.rakeshv.ifinances.repositories.BankRepository;
+import com.rakeshv.ifinances.repositories.BondRepository;
 import com.rakeshv.ifinances.repositories.BudgetRepository;
 import com.rakeshv.ifinances.repositories.CredentialRepository;
+import com.rakeshv.ifinances.repositories.CurrencyRepository;
+import com.rakeshv.ifinances.repositories.MarketRepository;
+import com.rakeshv.ifinances.repositories.PortfolioRepository;
+import com.rakeshv.ifinances.repositories.StockRepository;
 import com.rakeshv.ifinances.repositories.TimeTestRepository;
 import com.rakeshv.ifinances.repositories.TransactionRepository;
 import com.rakeshv.ifinances.repositories.UserRepository;
@@ -45,6 +56,14 @@ public class DbLoader implements CommandLineRunner {
     private TransactionRepository transactionRepository;
     @Autowired
     private BudgetRepository budgetRepository;
+    @Autowired
+    CurrencyRepository currencyRepository;
+    @Autowired
+    MarketRepository marketRepository;
+    @Autowired
+    StockRepository stockRepository;
+    @Autowired
+    BondRepository bondRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -159,6 +178,20 @@ public class DbLoader implements CommandLineRunner {
                 .openDate(new Date())
                 .name("FD").build();
 
+        Account checking = Account.builder()
+                .createdBy("Checking")
+                .createdDate(new Date())
+                .currentBalance(new BigDecimal("5.00"))
+                .initialBalance(new BigDecimal("0.00"))
+                .closeDate(new Date())
+                .lastUpdatedBy("Account")
+                .lastUpdatedDate(new Date())
+                .openDate(new Date())
+                .accountTypeEnum(AccountTypeEnum.CHECKING)
+                .name("FD").build();
+
+//        accountRepository.save(checking);
+
         account.getUsers().add(user1);
         account.getUsers().add(user);
         transaction.setAccount(account);
@@ -173,11 +206,11 @@ public class DbLoader implements CommandLineRunner {
 //        user1.getAccounts().add(account1);
 //        accountRepository.save(account1);
 //        account.getTransactions().add(transaction);
-        accountRepository.save(account);
-        accountRepository.save(account1);
+//        accountRepository.save(account);
+//        accountRepository.save(account1);
 
-        List<Account> accounts = accountRepository.findAll();
-        accounts.forEach(x -> System.out.println(x));
+//        List<Account> accounts = accountRepository.findAll();
+//        accounts.forEach(x -> System.out.println(x));
 
 //        List<Transaction> transactions = transactionRepository.findAll();
 //
@@ -190,6 +223,52 @@ public class DbLoader implements CommandLineRunner {
 
         budget.getTransactions().add(transaction);
 //        budgetRepository.save(budget);
+
+        Currency currency = Currency.builder()
+                .countryName("Switzerland")
+                .name("Frank")
+                .symbol("swissfrank").build();
+
+
+        Currency euro = Currency.builder()
+                .countryName("Amsterdam")
+                .name("Euro")
+                .symbol("€").build();
+
+//        currencyRepository.save(euro);
+        List<Currency> currencies = currencyRepository.findAll();
+        currencies.forEach(System.out::println);
+
+
+        Market market = Market.builder()
+                .marketName("Amsterdam Exchange")
+                .currency(euro).build();
+//        marketRepository.save(market);
+
+//        List<Market> markets = marketRepository.findAll();
+//        markets.forEach(System.out::println);
+
+        Portfolio portfolio = Portfolio.builder()
+                .name("My investment").build();
+
+        Stock stock = Stock.builder()
+                .quantity(new BigDecimal("10"))
+                .sharePrice(new BigDecimal("100.00"))
+                .build();
+        stock.setPortfolio(portfolio);
+
+        Bond bond = Bond.builder()
+                .interestRate(new BigDecimal("4.5"))
+                .maturityDate(new Date())
+                .value(new BigDecimal("5000"))
+                .build();
+        bond.setPortfolio(portfolio);
+
+        portfolio.getInvestments().add(stock);
+        portfolio.getInvestments().add(bond);
+
+        stockRepository.save(stock);
+        bondRepository.save(bond);
     }
 
     private static Date getBirthday() {
