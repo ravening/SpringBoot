@@ -11,6 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,6 +19,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -35,6 +38,10 @@ import java.util.Set;
 @Builder
 @Entity
 @Table(name = "account")
+@NamedQueries({
+        @NamedQuery(name = "Account.largeDeposits", query = "select distinct t.account from Transaction t " +
+            "where t.amount > 500 and lower(t.transactionType) = 'deposit' ")
+})
 public class Account {
     @Id
     // AUTO is the default generation strategy
@@ -54,7 +61,7 @@ public class Account {
             inverseJoinColumns=@JoinColumn(name="USER_ID"))
     private Set<User> users = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="BANK_ID")
     private Bank bank;
 

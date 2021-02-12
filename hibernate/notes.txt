@@ -131,7 +131,7 @@ more joins are needed. may lead to bad performance
 In our example, ticket_number, origin, price, destination are duplicated in both tables of subclass
 The deeper the hierarchy, the more deeper the joins needed
 
-3. table per concrete entity. no table for super class.
+3. TABLE_PER_CLASS : table per concrete entity. no table for super class.
 subclass has separate table
 all properties of root class are mapped to columns of each subclass
 poor support for polymorphism
@@ -148,9 +148,18 @@ use AttributeConverter between state to db column
 
 Entity lifecycle
 
+
+Transient
+Persistent
+Removed
+Detached
+
+
 entitymanager is an interface to interact with persistence context
 Entity states
 new, managed, removed, detached, transient
+
+Transient - object created with new operator but is not yet associated with db row
 
 persist(), remove(), merge(), find(), lock(), detach(), refresh()
 when entity is loaded from db then they are in Managed state
