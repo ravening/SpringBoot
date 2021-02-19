@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Player {
-
-    private String login;
-    private String gameId;
+public class Response {
+    private String message;
+    private Object sessionid;
 }

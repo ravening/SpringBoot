@@ -6,12 +6,14 @@ import com.rakeshv.tictactoe.models.Game;
 import com.rakeshv.tictactoe.models.GamePlay;
 import com.rakeshv.tictactoe.models.Player;
 
+import java.util.Optional;
+
 public interface GameService {
     Game createGame(Player player, Object sessionId);
 
-    Game connectToGame(Player player2, String gameId) throws GameNotFoundException, InvalidGameException;
+    Optional<Game> connectToGame(Player player2, String sessionId);
 
-    Game connectToRandomGame(Player player, Object sessionId) throws GameNotFoundException;
+    Optional<Game> connectToRandomGame(Player player, Object sessionId) throws GameNotFoundException;
 
     Game playGame(GamePlay gamePlay) throws GameNotFoundException, InvalidGameException;
 }

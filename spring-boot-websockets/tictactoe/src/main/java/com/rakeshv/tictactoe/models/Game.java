@@ -9,11 +9,13 @@ public class Game {
     private String gameId;
     Player player1;
     Player player2;
-    String player1SessionId;
-    String player2SessionId;
+    Object player1SessionId;
+    Object player2SessionId;
     private GameStatus gameStatus;
     private int[][] board;
     private int[] row;
     private int[] column;
-    private Tick winner;
+    private String winner;
+    boolean isFirstPlayer;
+    String currentTick;
 }

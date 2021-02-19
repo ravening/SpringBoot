@@ -6,12 +6,12 @@ import com.rakeshv.tictactoe.models.Game;
 import com.rakeshv.tictactoe.models.GamePlay;
 import com.rakeshv.tictactoe.models.GameStatus;
 import com.rakeshv.tictactoe.models.Player;
+import com.rakeshv.tictactoe.models.Tick;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -26,46 +26,52 @@ public class GameServiceImpl implements GameService {
                 .board(new int[3][3])
                 .row(new int[3])
                 .column(new int[3])
-                .gameId(UUID.randomUUID().toString())
+                .gameId(String.valueOf(sessionId))
                 .player1(player)
+                .player1SessionId(sessionId)
+                .isFirstPlayer(true)
+                .currentTick("X")
                 .gameStatus(GameStatus.NEW).build();
-        GameStorage.getInstance().setGames(game);
-        GameStorage.getInstance().addGameToSession(sessionId, game.getGameId());
+        GameStorage.getInstance().addGame(game);
         return game;
     }
 
     @Override
-    public Game connectToGame(Player player, String gameId) throws GameNotFoundException, InvalidGameException {
-        Optional<Game> gameOptional = Optional.ofNullable(GameStorage.getInstance().getGames().get(gameId));
+    public Optional<Game> connectToGame(Player player, String sessionId) {
+        Optional<Game> gameOptional = Optional.ofNullable(GameStorage.getInstance().getGames().get(player.getGameId()));
         if (gameOptional.isEmpty()) {
-            throw new GameNotFoundException("Unable to find game with id " + gameId);
+            return Optional.empty();
         }
 
         Game game = gameOptional.get();
-        if (game.getPlayer2() != null) {
-            throw new InvalidGameException("Game is not valid anymore");
+        if (game.getPlayer2() != null || game.getGameStatus().equals(GameStatus.IN_PROGRESS)) {
+            return Optional.empty();
         }
 
-        return addPlayerToGame(game, player);
+        return Optional.of(addPlayerToGame(game, player, sessionId));
     }
 
     @Override
-    public Game connectToRandomGame(Player player, Object sessionId) throws GameNotFoundException {
-        Game game = GameStorage.getInstance().getGames()
+    public Optional<Game> connectToRandomGame(Player player, Object sessionId) throws GameNotFoundException {
+        Optional<Game> optionalGame = GameStorage.getInstance().getGames()
                 .values().stream()
                 .filter(g -> g.getGameStatus().equals(GameStatus.NEW))
-                .findFirst()
-                .orElseThrow(() -> new GameNotFoundException("Unable to find any new games. Please create new game"));
+                .findFirst();
 
-        log.info("Adding player {} to game id {}, created by {}", player.getLogin(), game.getGameId(), game.getPlayer1().getLogin());
-        GameStorage.getInstance().addGameToSession(sessionId, game.getGameId());
-        return addPlayerToGame(game, player);
+        if (optionalGame.isPresent()) {
+            Game game = optionalGame.get();
+            log.info("Adding player {} to game id {}, created by {}", player.getLogin(), game.getGameId(), game.getPlayer1().getLogin());
+            return Optional.of(addPlayerToGame(game, player, sessionId));
+        }
+        return Optional.empty();
     }
 
-    private Game addPlayerToGame(Game game, Player player) {
+    private Game addPlayerToGame(Game game, Player player, Object sessionId) {
+        game.setPlayer2SessionId(sessionId);
         game.setPlayer2(player);
         game.setGameStatus(GameStatus.IN_PROGRESS);
-        GameStorage.getInstance().setGames(game);
+        GameStorage.getInstance().addGame(game);
+        GameStorage.getInstance().addGame(sessionId.toString(), game);
 
         return game;
     }
@@ -90,9 +96,13 @@ public class GameServiceImpl implements GameService {
         game.setBoard(board);
         game.setRow(row);
         game.setColumn(column);
+        log.error("isfirst player ? " + game.isFirstPlayer());
+        game.setFirstPlayer(!game.isFirstPlayer());
+        log.error("isfirst player ? " + game.isFirstPlayer());
         game = gameEngine.checkWinner(game);
 
-        GameStorage.getInstance().setGames(game);
+        game.setCurrentTick(game.isFirstPlayer() ? "X" : "O");
+        GameStorage.getInstance().addGame(game);
         return game;
     }
 }

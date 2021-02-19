@@ -2,6 +2,7 @@ package com.rakeshv.tictactoe.config;
 
 import com.rakeshv.tictactoe.models.Game;
 import com.rakeshv.tictactoe.models.GameStatus;
+import com.rakeshv.tictactoe.models.Response;
 import com.rakeshv.tictactoe.services.GameStorage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 @Configuration
@@ -65,13 +67,21 @@ public class WebsocketConfiguration implements WebSocketMessageBrokerConfigurer 
 
     @EventListener
     public void onDisconnectEvent(SessionDisconnectEvent event) {
-        String message = "Game terminated";
-        log.error("session disconnet {}",  event.getSessionId());
-        String gameId = GameStorage.getInstance().getGameBySessionId(event.getSessionId());
-        Game game = GameStorage.getInstance().getGameById(gameId);
-        game.setGameStatus(GameStatus.TERMINATED);
-        this.messagingTemplate.convertAndSend("/topic/terminate-game/" + game.getPlayer1().getLogin(), message);
-        this.messagingTemplate.convertAndSend("/topic/terminate-game/" + game.getPlayer2().getLogin(), message);
+        String sessionId = event.getSessionId();
+        String user = GameStorage.getInstance().getUserName(sessionId);
+        String message = "Game terminated by " + user;
+        Optional<Game> optionalGame = GameStorage.getInstance().getGameById(sessionId);
+        if (optionalGame.isPresent()) {
+            Game game = optionalGame.get();
+            game.setGameStatus(GameStatus.TERMINATED);
+            GameStorage.getInstance().removeGame(sessionId);
+            GameStorage.getInstance().removePlayer(sessionId);
+
+            Response response = Response.builder().message(message).build();
+            this.messagingTemplate.convertAndSend("/topic/terminate-game/" + game.getPlayer1().getLogin(), response);
+            if (game.getPlayer2() != null)
+                this.messagingTemplate.convertAndSend("/topic/terminate-game/" + game.getPlayer2().getLogin(), response);
+        }
     }
 
     @Override

@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum Tick {
     X(1),
-    O(2)
+    O(4)
     ;
 
     private final int value;

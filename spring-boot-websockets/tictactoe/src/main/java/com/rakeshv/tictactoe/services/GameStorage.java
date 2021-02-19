@@ -3,16 +3,17 @@ package com.rakeshv.tictactoe.services;
 import com.rakeshv.tictactoe.models.Game;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class GameStorage {
     private static Map<String, Game> games;
-    private static Map<Object, String> sessionMap;
+    private static Map<Object, String> userMap;
     private static GameStorage instance;
 
     private GameStorage(){
         games = new ConcurrentHashMap<>();
-        sessionMap = new ConcurrentHashMap<>();
+        userMap = new ConcurrentHashMap<>();
     }
 
     public static synchronized GameStorage getInstance() {
@@ -27,19 +28,35 @@ public class GameStorage {
         return games;
     }
 
-    public Game getGameById(String gameId) {
-        return games.get(gameId);
+    public Optional<Game> getGameById(String gameId) {
+        return Optional.ofNullable(games.get(gameId));
     }
 
-    public void setGames(Game game) {
+    public void addGame(Game game) {
         games.put(game.getGameId(), game);
     }
 
-    public void addGameToSession(Object sessionId, String gameId) {
-        sessionMap.put(sessionId, gameId);
+    public void removeGame(String id) {
+        games.remove(id);
+    }
+    public void addGame(String sessionId, Game game) {
+        games.put(sessionId, game);
     }
 
-    public String getGameBySessionId(Object sessionId) {
-        return sessionMap.get(sessionId);
+    public void addPlayer(Object sessionId, String userName) {
+        userMap.put(sessionId, userName);
+    }
+
+    public boolean checkIfUserExists(String userName) {
+        return userMap.values().stream()
+                .anyMatch(x -> x.equalsIgnoreCase(userName));
+    }
+
+    public String getUserName(Object sessionId) {
+        return userMap.get(sessionId);
+    }
+
+    public void removePlayer(String sessionId) {
+        userMap.remove(sessionId);
     }
 }
