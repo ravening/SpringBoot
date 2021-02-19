@@ -1,9 +1,12 @@
-let url = 'http://localhost:8080';
+let url = 'http://95.168.184.69:8080';
 let stompClient;
 let gameId = null;
 let login;
 let sessionId = '';
 let isFirstPlayer = false;
+let internalGameId = '';
+let currentPlayer = '';
+let opponent = '';
 
 function connect(login, newgame) {
     let socket = new SockJS(url + "/gameplay");
@@ -14,34 +17,41 @@ function connect(login, newgame) {
             player = !player
             isFirstPlayer = !isFirstPlayer
             let data = JSON.parse(response.body);
-            playerTick = data.currentTick
-            console.log(data)
+            currentPlayer = data.currentPlayer;
+            // console.log(data)
             displayBoardData(data)
+            $("#playerturn").html('Its ' + currentPlayer + ' turn')
         })
         stompClient.subscribe("/topic/game-over/" + login, function (response) {
-            canPlay = false
             player = !player
             isFirstPlayer = !isFirstPlayer
             let data = JSON.parse(response.body);
-            console.log(data.message)
-            alert(data.message)
+            currentPlayer = data.game.currentPlayer
+            displayBoardData(data.game)
+            $("#playerturn").html('Its ' + currentPlayer + ' turn')
         })
         stompClient.subscribe("/topic/start-game/" + login, function (response) {
             player = true
             isFirstPlayer = true
+            currentPlayer = login
             let data = JSON.parse(response.body)
             sessionId = data.player1SessionId
-            playerTick = data.currentTick
+            internalGameId = data.gameId
+            playerTick = 'X'
             displayBoardData(data)
-            // reset()
-            console.log(data)
+            // console.log(data)
+            alert('Created new game with id ' + internalGameId)
         })
         stompClient.subscribe("/topic/connect-random/player1/" + login, function (response) {
             isFirstPlayer = true
             canPlay = true
             let data = JSON.parse(response.body)
-            console.log(data)
+            // console.log(data)
+            opponent = data.player2.login
+            currentPlayer = data.currentPlayer
             alert('You are playing with ' + data.player2.login)
+            $("#playerturn").html('Its ' + currentPlayer + ' turn')
+            $("#gameinfo").html('You are playing with ' + data.player2.login)
         })
         stompClient.subscribe('/topic/connect-random/player2/' + login, function (response) {
             isFirstPlayer = false
@@ -49,12 +59,16 @@ function connect(login, newgame) {
             canPlay = true
             let data = JSON.parse(response.body)
             sessionId = data.player2SessionId
+            currentPlayer = data.currentPlayer
+            opponent = data.player1.login
+            playerTick = 'O'
             alert('You are playing with ' + data.player1.login)
+            $("#playerturn").html('Its ' + currentPlayer + ' turn')
+            $("#gameinfo").html('You are playing with ' + data.player1.login)
         })
         stompClient.subscribe('/topic/terminate-game/' + login, function (response) {
-            canPlay = false
             let data = JSON.parse(response.body)
-            disconnect()
+            resetBoard()
             alert(data.message)
         })
         stompClient.subscribe('/topic/invalid-username/' + login, function (response) {
@@ -69,14 +83,11 @@ function connect(login, newgame) {
             disconnect()
         })
         if (gameId !== null && gameId !== '' && newgame === false) {
-            console.log('connecting to game id ' + gameId)
             stompClient.send('/app/connect/gameid', {}, JSON.stringify({ "login": login, "gameId": gameId }) )
         } else {
             if (newgame === true) {
-                console.log('starting a new game')
                 stompClient.send("/app/start", {}, JSON.stringify({"login": login}))
             } else {
-                console.log('connecting to random game')
                 stompClient.send("/app/connect/random", {}, JSON.stringify({"login": login}))
             }
         }
@@ -106,10 +117,12 @@ function connectToRandomGame() {
 function connectToSpecificGame() {
     login = document.getElementById("login").value;
     gameId = document.getElementById("game_id").value;
+    if (login === null || login === '') {
+        alert('Please enter login name')
+    } else
     if (gameId === null || gameId === '') {
         alert('Please enter game id')
     } else {
-        console.log('game id is ' + gameId)
         connect(login, false)
     }
 }

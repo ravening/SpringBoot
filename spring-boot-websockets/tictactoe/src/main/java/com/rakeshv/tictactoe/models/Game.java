@@ -18,4 +18,6 @@ public class Game {
     private String winner;
     boolean isFirstPlayer;
     String currentTick;
+    String currentPlayer;
+    int count;
 }

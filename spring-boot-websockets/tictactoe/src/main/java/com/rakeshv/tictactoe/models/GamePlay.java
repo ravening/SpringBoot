@@ -9,4 +9,5 @@ public class GamePlay {
     private int y;
     private String gameId;
     int turn;
+    String player;
 }

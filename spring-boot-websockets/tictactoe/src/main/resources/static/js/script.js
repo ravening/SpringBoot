@@ -1,13 +1,15 @@
 var turns = [ ["#","#","#"] , ["#","#","#"] , [ "#","#", "#"] ];
 let player = true;
 let canPlay = false;
-let playerTick = ''
+let playerTick = '';
+let winner = null;
 
 function playerTurn (id) {
     let xy = id.split("_")
     let x = xy[0]
     let y = xy[1]
-    stompClient.send('/app/play', {}, JSON.stringify({"type": playerTick, "x": x, "y": y, gameId: sessionId}))
+    stompClient.send('/app/play', {},
+        JSON.stringify({"type": playerTick, "x": x, "y": y, gameId: sessionId, "player": opponent }))
 }
 
 function displayBoardData(data) {
@@ -31,26 +33,40 @@ function displayBoardData(data) {
 
     if (data.winner !== null) {
         alert("Winner is " + data.winner)
-        reset()
+        winner = data.winner
+        resetBoard()
     }
-    console.log('count is ' + count)
     if (count === 9) {
         alert('Match draw')
-        reset()
+        resetBoard()
+        stompClient.send('/app/draw-game', {}, JSON.stringify( { "login": login }))
+    }
+}
+
+function resetBoard() {
+    for (let i = 0; i < 3; i++) {
+        for (let  j = 0; j < 3; j++) {
+            turns[i][j] = ''
+            let  id = i + "_" + j
+            $('#' + id).text(turns[i][j])
+        }
     }
 }
 
 $(".tic").click(function(){
     const slot = $(this).attr('id');
-    if (player === true && canPlay === true) {
-        playerTurn(slot);
+    if (currentPlayer === login && canPlay === true) {
+        playerTurn(slot)
     }
 });
 
 function reset(){
+    stompClient.send('/app/reset', {}, JSON.stringify( {"login": login }))
+    resetBoard()
     canPlay = true
     isFirstPlayer = !isFirstPlayer
-    turns = [["#","#","#"], ["#","#","#"] , ["#","#", "#"]];
+    player = !player
+    turns = [["","",""], ["","",""] , ["","", ""]];
     $(".tic").text("");
 }
 

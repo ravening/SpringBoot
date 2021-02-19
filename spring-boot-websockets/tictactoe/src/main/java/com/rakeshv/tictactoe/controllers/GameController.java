@@ -53,9 +53,11 @@ public class GameController {
             String player1 = game.getPlayer1().getLogin();
             String player2 = game.getPlayer2().getLogin();
             this.messagingTemplate.convertAndSend("/topic/game-over/" + player1,
-                    Response.builder().message("Winner is " + game.getWinner()).build());
+                    Response.builder().message("Winner is " + game.getWinner()).game(game).build());
             this.messagingTemplate.convertAndSend("/topic/game-over/" + player2,
-                    Response.builder().message("Winner is " + game.getWinner()).build());
+                    Response.builder().message("Winner is " + game.getWinner()).game(game).build());
+            game.setWinner(null);
+            GameStorage.getInstance().addGame(game);
         } else {
             this.messagingTemplate.convertAndSend("/topic/game-progress/" + game.getPlayer1().getLogin(), game);
             this.messagingTemplate.convertAndSend("/topic/game-progress/" + game.getPlayer2().getLogin(), game);
@@ -102,6 +104,22 @@ public class GameController {
         }
     }
 
+    @MessageMapping("/reset")
+    public void resetGame(@Payload Player player, Message<?> message) {
+        MessageHeaders headers = message.getHeaders();
+        Object sessionId = headers.get("simpSessionId");
+        Game game = gameService.resetGame(sessionId.toString(), player);
+        Response response = Response.builder().message("Game has been reset by " + player.getLogin()).build();
+        this.messagingTemplate.convertAndSend("/topic/terminate-game/" + game.getPlayer1().getLogin(), response);
+        this.messagingTemplate.convertAndSend("/topic/terminate-game/" + game.getPlayer2().getLogin(), response);
+    }
+
+    @MessageMapping("/draw-game")
+    public void drawGame(@Payload Player player, Message<?> message) {
+        MessageHeaders headers = message.getHeaders();
+        Object sessionId = headers.get("simpSessionId");
+        gameService.resetGame(sessionId.toString(), player);
+    }
     @MessageMapping("/disconnect")
     public void disconnectPlayer(@Payload Player player) {
         log.error("Player {} disconnected", player);

@@ -35,6 +35,9 @@ public class GameEngine {
 
         if (winner != null) {
             game.setWinner(winner == Tick.X ? game.getPlayer1().getLogin() : game.getPlayer2().getLogin());
+            game.setBoard(new int[3][3]);
+            game.setRow(new int[3]);
+            game.setColumn(new int[3]);
         }
         return game;
     }

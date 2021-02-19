@@ -56,3 +56,12 @@ footer{
     text-align: center;
     padding-top: 20px;
 }
+#gameinfo {
+    background: #333;
+    color: #fff;
+}
+
+#playerturn {
+    background: #333;
+    color: #fff;
+}

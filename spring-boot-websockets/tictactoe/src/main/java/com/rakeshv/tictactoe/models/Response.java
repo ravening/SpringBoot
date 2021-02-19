@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class Response {
     private String message;
     private Object sessionid;
+    private Game game;
 }

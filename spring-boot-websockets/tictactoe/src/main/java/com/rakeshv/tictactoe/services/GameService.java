@@ -16,4 +16,6 @@ public interface GameService {
     Optional<Game> connectToRandomGame(Player player, Object sessionId) throws GameNotFoundException;
 
     Game playGame(GamePlay gamePlay) throws GameNotFoundException, InvalidGameException;
+
+    Game resetGame(String id, Player player);
 }

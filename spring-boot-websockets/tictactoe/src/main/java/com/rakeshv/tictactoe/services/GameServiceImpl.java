@@ -31,6 +31,7 @@ public class GameServiceImpl implements GameService {
                 .player1SessionId(sessionId)
                 .isFirstPlayer(true)
                 .currentTick("X")
+                .currentPlayer(player.getLogin())
                 .gameStatus(GameStatus.NEW).build();
         GameStorage.getInstance().addGame(game);
         return game;
@@ -96,13 +97,34 @@ public class GameServiceImpl implements GameService {
         game.setBoard(board);
         game.setRow(row);
         game.setColumn(column);
-        log.error("isfirst player ? " + game.isFirstPlayer());
         game.setFirstPlayer(!game.isFirstPlayer());
-        log.error("isfirst player ? " + game.isFirstPlayer());
         game = gameEngine.checkWinner(game);
+        game.setCurrentPlayer(gamePlay.getPlayer());
 
         game.setCurrentTick(game.isFirstPlayer() ? "X" : "O");
         GameStorage.getInstance().addGame(game);
         return game;
+    }
+
+    public Game resetGame(String id, Player player) {
+        Optional<Game> optionalGame = GameStorage.getInstance().getGameById(id);
+        if (optionalGame.isPresent()) {
+            Game game = optionalGame.get();
+            game.setBoard(new int[3][3]);
+            game.setRow(new int[3]);
+            game.setColumn(new int[3]);
+            game.setFirstPlayer(true);
+            game.setWinner(null);
+            game.setGameStatus(GameStatus.TERMINATED);
+            game.setCount(0);
+
+            String currentPlayer = player.getLogin().equalsIgnoreCase(game.getPlayer1().getLogin()) ?
+                    game.getPlayer2().getLogin() : game.getPlayer1().getLogin();
+            game.setCurrentPlayer(currentPlayer);
+            GameStorage.getInstance().addGame(game);
+            return game;
+        }
+
+        return null;
     }
 }
