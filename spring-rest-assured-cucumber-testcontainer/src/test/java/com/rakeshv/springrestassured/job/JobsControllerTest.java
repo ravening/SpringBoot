@@ -137,7 +137,7 @@ class JobsControllerTest {
         given().contentType(ContentType.JSON)
                 .body("""
                             {
-                              "jobTitle": "Electrical Engineer",
+                              "jobTitle": "AI Engineer",
                               "description": "XYZ inc. Is looking for an experienced Electrical Engineer.",
                               "jobType": "CONTRACTOR",
                               "datePosted": "2023-09-18",
@@ -148,7 +148,10 @@ class JobsControllerTest {
                 .when()
                 .put("/api/v1/jobs/{jobId}", 3)
                 .then()
-                .statusCode(204);
+                .statusCode(200)
+                .body("id", equalTo(3))
+                .body("jobTitle", containsStringIgnoringCase("AI Engineer"))
+        ;
     }
 
     @Test

@@ -8,7 +8,7 @@ public interface JobService {
 
     JobResponse findJobById(Long jobId);
 
-    void updateJob(Long jobId, JobRequest updateJobRequest);
+    JobResponse updateJob(Long jobId, JobRequest updateJobRequest);
 
     void deleteJob(Long jobId);
 

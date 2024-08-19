@@ -33,12 +33,14 @@ class DefaultJobService implements JobService{
 
     @Override
     @Transactional
-    public void updateJob(Long jobId, JobRequest updateJobRequest) {
+    public JobResponse updateJob(Long jobId, JobRequest updateJobRequest) {
         var jobToUpdate = jobRepository.findByIdOrThrow(jobId);
         jobToUpdate.updateJob(updateJobRequest.jobTitle(), updateJobRequest.description(),
                 updateJobRequest.jobType(), updateJobRequest.datePosted(),
                 updateJobRequest.jobLink());
         jobRepository.save(jobToUpdate);
+
+        return jobDataMapper.mapJobToJobResponse(jobToUpdate);
     }
 
     @Override

@@ -48,9 +48,8 @@ public class JobsController {
 
     @Operation(summary = "Update a Job Post")
     @PutMapping("/{jobId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    void updateJob(@PathVariable("jobId") Long jobId, @Valid @RequestBody JobRequest updateJobRequest){
-        jobService.updateJob(jobId, updateJobRequest);
+    JobResponse updateJob(@PathVariable("jobId") Long jobId, @Valid @RequestBody JobRequest updateJobRequest){
+        return jobService.updateJob(jobId, updateJobRequest);
     }
 
     @Operation(summary = "Delete a Job post")
