@@ -16,7 +16,7 @@
 
     <properties>
         <java.version>11</java.version>
-        <vertx.version>3.9.0</vertx.version>
+        <vertx.version>3.9.4</vertx.version>
     </properties>
 
     <dependencies>
