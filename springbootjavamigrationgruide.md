@@ -1555,6 +1555,8 @@ management:
 - **Jackson 3**: Improved JSON processing performance
 - **Virtual threads**: Consider enabling with Java 21+ (`spring.threads.virtual.enabled=true`)
 
+**Note:** This document is intended to provide a comprehensive overview of the migration process from Spring Boot 3.5.x to 4.0.0, covering all major changes, code updates, configuration adjustments, and best practices to ensure a smooth transition. Always refer to the official documentation and release notes for the most up-to-date information.
+
 ## Resources
 
 - [Spring Boot 4.0 Migration Guide](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-4.0-Migration-Guide)
